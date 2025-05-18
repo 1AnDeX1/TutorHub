@@ -1,0 +1,8 @@
+<a routerLink="login" routerLinkActive="active">Login</a><br>
+<a routerLink="teacher-registration" routerLinkActive="active">Register as teacher</a><br>
+<a routerLink="student-registration" routerLinkActive="active">Register as student</a><br>
+<button *ngIf="isLoggedIn()" (click)="logout()" class="btn btn-danger">
+  Logout
+</button>
+
+<router-outlet></router-outlet>

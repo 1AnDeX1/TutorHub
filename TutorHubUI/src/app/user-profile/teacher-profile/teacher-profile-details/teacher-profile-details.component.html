@@ -1,0 +1,83 @@
+<div *ngIf="!isLoading; else loading">
+  <h2>Teacher Profile</h2>
+
+  <div *ngIf="!isEditing; else editMode">
+    <p><strong>Username:</strong> {{ teacher.userName }}</p>
+    <p><strong>Email:</strong> {{ teacher.email }}</p>
+    <p><strong>Subjects:</strong>
+      <span *ngIf="teacher.subjects.length > 0; else noSubjects">
+        <span *ngFor="let s of teacher.subjects; let i = index">
+          {{ Subject[s] }}<span *ngIf="i < teacher.subjects.length - 1">, </span>
+        </span>
+      </span>
+      <ng-template #noSubjects>No subjects selected</ng-template>
+    </p>
+    <p><strong>Hourly Rate:</strong> {{ teacher.hourlyRate | currency }}</p>
+    <p><strong>Age:</strong> {{ teacher.age }}</p>
+    <p><strong>Description:</strong> {{ teacher.description }}</p>
+    <p><strong>Verification Status:</strong> {{ VerificationStatus[verificationEnum!] || 'Unknown' }}</p>
+
+    <button class="btn btn-primary" (click)="enableEdit()">Edit</button>
+    <button class="btn btn-danger" (click)="deleteTeacher()">Delete Profile</button>
+  </div>
+
+  <ng-template #editMode>
+    <form (ngSubmit)="updateTeacher()">
+      <div class="form-group">
+        <label>Username</label>
+        <input [(ngModel)]="teacher.userName" name="userName" class="form-control" required />
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input [(ngModel)]="teacher.email" name="email" class="form-control" required />
+      </div>
+
+    <div class="form-group">
+        <label>Password</label>
+        <input
+            type="password"
+            [(ngModel)]="teacher.password"
+            name="password"
+            class="form-control"
+            required />
+    </div>
+
+
+      <div class="form-group">
+        <label>Subjects</label><br />
+        <div *ngFor="let subject of subjectKeys">
+          <label>
+            <input
+              type="checkbox"
+              [checked]="isSubjectSelected(subject)"
+              (change)="toggleSubject(subject)" />
+            {{ subject }}
+          </label>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Hourly Rate</label>
+        <input type="number" [(ngModel)]="teacher.hourlyRate" name="hourlyRate" class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label>Age</label>
+        <input type="number" [(ngModel)]="teacher.age" name="age" class="form-control" />
+      </div>
+
+      <div class="form-group">
+        <label>Description</label>
+        <textarea [(ngModel)]="teacher.description" name="description" class="form-control"></textarea>
+      </div>
+
+      <button class="btn btn-success" type="submit">Save</button>
+      <button class="btn btn-secondary" type="button" (click)="cancelEdit()">Cancel</button>
+    </form>
+  </ng-template>
+</div>
+
+<ng-template #loading>
+  <p>Loading...</p>
+</ng-template>

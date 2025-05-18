@@ -1,0 +1,39 @@
+<div>
+  <h1>Teachers</h1>
+
+  <ul *ngIf="teacherService.list.length > 0; else noTeachers">
+    <li *ngFor="let tm of teacherService.list">
+      <a [routerLink]="['/teachers', tm.id]" class="btn btn-primary" style="margin-top: 10px;">
+        <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
+          <strong>Name:</strong> {{ tm.userName }}<br>
+          <strong>Email:</strong> {{ tm.email }}<br>
+
+          <strong>Subjects:</strong>
+          <ng-container *ngIf="tm.subjects.length > 0; else noSubjects">
+            <span *ngFor="let s of tm.subjects; let i = index">
+              {{ subjectEnum[s] }}<span *ngIf="i < tm.subjects.length - 1">, </span>
+            </span>
+          </ng-container>
+          <ng-template #noSubjects>No subjects</ng-template>
+          <br>
+
+          <strong>Hourly Rate:</strong> {{ tm.hourlyRate | currency }}<br>
+          <strong>Rating:</strong> {{ tm.rating }} / 5<br>
+          <strong>Online:</strong> {{ tm.online ? 'Yes' : 'No' }}<br>
+          <strong>Offline:</strong> {{ tm.offline ? 'Yes' : 'No' }}<br>
+          <strong>Age:</strong> {{ tm.age }}<br>
+          <strong>Description:</strong> {{ tm.description || 'N/A' }}<br>
+          <strong>Verification Status:</strong> {{ verificationEnum[tm.verificationStatus!] || 'Unknown' }}
+
+          <div style="margin-top: 8px;">
+            <i class="fa-solid fa-trash-can" (click)="deleteTeacher(tm.id)" style="cursor: pointer; color: red;"></i>
+          </div>
+        </div>
+      </a>
+    </li>
+  </ul>
+
+  <ng-template #noTeachers>
+    <p>No teachers available.</p>
+  </ng-template>
+</div>

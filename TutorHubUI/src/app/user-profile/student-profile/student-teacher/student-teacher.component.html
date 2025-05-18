@@ -1,0 +1,43 @@
+<div *ngIf="teachers.length > 0; else noTeachers">
+  <div *ngFor="let teacher of teachers" class="card mb-4 p-3">
+    <h4>{{ teacher.userName }}</h4>
+    <p><strong>Email:</strong> {{ teacher.email }}</p>
+    <p>
+      <strong>Subjects:</strong>
+      <ng-container *ngIf="teacher.subjects.length > 0; else noSubjects">
+        <span *ngFor="let s of teacher.subjects; let i = index">
+          {{ Subject[s] }}<span *ngIf="i < teacher.subjects.length - 1">, </span>
+        </span>
+      </ng-container>
+      <ng-template #noSubjects>No subjects</ng-template>
+    </p>
+    <p><strong>Hourly Rate:</strong> {{ teacher.hourlyRate | currency }}</p>
+
+    <button class="btn btn-warning mb-3" (click)="unsubscribe(teacher.id)">
+      Unsubscribe
+    </button>
+
+    <div class="form-group">
+      <label for="rating-{{ teacher.id }}">Rate this teacher:</label>
+      <select
+        id="rating-{{ teacher.id }}"
+        class="form-control"
+        [(ngModel)]="ratingValues[teacher.id]"
+        [ngModelOptions]="{ standalone: true }"
+      >
+        <option value="" disabled selected>Select rating</option>
+        <option *ngFor="let r of [1, 2, 3, 4, 5]" [value]="r">{{ r }}</option>
+      </select>
+      <button
+        class="btn btn-success mt-2"
+        (click)="rateTeacher(teacher.id)"
+      >
+        Submit Rating
+      </button>
+    </div>
+  </div>
+</div>
+
+<ng-template #noTeachers>
+  <p>No confirmed teachers found.</p>
+</ng-template>

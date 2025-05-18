@@ -1,0 +1,127 @@
+<div *ngIf="isLoading">
+  <p>Loading student details...</p>
+</div>
+
+<!-- VIEW MODE -->
+<div *ngIf="!isLoading && !isEditing">
+  <h3>Student Profile</h3>
+  <p><strong>User Name:</strong> {{ student.userName }}</p>
+  <p><strong>Email:</strong> {{ student.email }}</p>
+  <p><strong>Age:</strong> {{ student.age }}</p>
+  <p><strong>Grade:</strong> {{ student.grade || 'N/A' }}</p>
+  <p><strong>Description:</strong> {{ student.description || 'N/A' }}</p>
+
+  <button class="btn btn-primary" (click)="enableEdit()">Edit</button>
+  <button class="btn btn-danger ms-2" (click)="deleteStudent()">Delete</button>
+</div>
+
+<!-- EDIT MODE -->
+<form *ngIf="!isLoading && isEditing" (ngSubmit)="updateStudent()" #studentForm="ngForm" novalidate>
+  <h3>Edit Student Profile</h3>
+
+  <div class="mb-3">
+    <label for="userName" class="form-label">User Name</label>
+    <input
+      id="userName"
+      name="userName"
+      type="text"
+      class="form-control"
+      required
+      minlength="3"
+      [(ngModel)]="student.userName"
+      #userName="ngModel"
+    />
+    <div *ngIf="userName.invalid && userName.touched" class="text-danger">
+      User Name is required and must be at least 3 characters.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="email" class="form-label">Email</label>
+    <input
+      id="email"
+      name="email"
+      type="email"
+      class="form-control"
+      required
+      [(ngModel)]="student.email"
+      #email="ngModel"
+    />
+    <div *ngIf="email.invalid && email.touched" class="text-danger">
+      Please enter a valid email.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input
+        id="password"
+        name="password"
+        type="password"
+        class="form-control"
+        required
+        minlength="6"
+        [(ngModel)]="student.password"
+        #password="ngModel"
+    />
+    <div *ngIf="password.invalid && password.touched" class="text-danger">
+        Password is required and must be at least 6 characters.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="age" class="form-label">Age</label>
+    <input
+      id="age"
+      name="age"
+      type="number"
+      class="form-control"
+      required
+      min="1"
+      [(ngModel)]="student.age"
+      #age="ngModel"
+    />
+    <div *ngIf="age.invalid && age.touched" class="text-danger">
+      Please enter a valid age.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label for="grade" class="form-label">Grade (optional)</label>
+    <input
+      id="grade"
+      name="grade"
+      type="number"
+      class="form-control"
+      min="1"
+      max="12"
+      [(ngModel)]="student.grade"
+    />
+  </div>
+
+  <div class="mb-3">
+    <label for="description" class="form-label">Description (optional)</label>
+    <textarea
+      id="description"
+      name="description"
+      class="form-control"
+      rows="3"
+      [(ngModel)]="student.description"
+    ></textarea>
+  </div>
+
+  <button
+    type="submit"
+    class="btn btn-success"
+    [disabled]="studentForm.invalid"
+  >
+    Save Changes
+  </button>
+  <button
+    type="button"
+    class="btn btn-secondary ms-2"
+    (click)="cancelEdit()"
+  >
+    Cancel
+  </button>
+</form>

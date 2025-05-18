@@ -1,0 +1,53 @@
+<h2>Teacher Schedule</h2>
+
+<form [formGroup]="scheduleForm" (ngSubmit)="onSubmit()">
+  <label for="dayOfWeek">Day of Week:</label>
+  <select formControlName="dayOfWeek" id="dayOfWeek">
+    <option *ngFor="let day of dayOfWeekEnum; let i = index" [value]="i">
+      {{ day }}
+    </option>
+  </select>
+
+  <label for="startTime">Start Time:</label>
+  <input type="string" formControlName="startTime" id="startTime" required />
+
+  <label for="endTime">End Time:</label>
+  <input type="string" formControlName="endTime" id="endTime" required />
+
+  <label for="studentId">Student ID:</label>
+  <input type="number" formControlName="studentId" id="studentId" required />
+
+  <button type="submit">{{ selectedSchedule ? 'Update' : 'Add' }} Schedule</button>
+  <button type="button" (click)="resetForm()" *ngIf="selectedSchedule">Cancel</button>
+</form>
+
+<hr />
+
+<div *ngIf="schedule.length > 0; else noSchedule">
+  <table border="1">
+    <thead>
+      <tr>
+        <th>Day</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Student ID</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let slot of schedule">
+        <td>{{ getDayName(slot.dayOfWeek) }}</td>
+        <td>{{ slot.startTime }}</td>
+        <td>{{ slot.endTime }}</td>
+        <td>
+          <button (click)="onEdit(slot)">Edit</button>
+          <button (click)="onDelete(slot.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #noSchedule>
+  <p>No schedule found.</p>
+</ng-template>

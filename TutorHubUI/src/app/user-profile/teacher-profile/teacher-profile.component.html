@@ -1,0 +1,14 @@
+<div style="display: flex;">
+  <!-- Left menu -->
+  <div style="width: 200px; padding: 10px; border-right: 1px solid #ccc;">
+    <a routerLink="profile" routerLinkActive="active">Profile</a><br>
+    <a routerLink="schedule" routerLinkActive="active">Schedule</a><br>
+    <a routerLink="availabilities" routerLinkActive="active">Availabilities</a><br>
+    <a routerLink="students" routerLinkActive="active">Students</a>
+  </div>
+
+  <!-- Right content area -->
+  <div style="flex: 1; padding: 10px;">
+    <router-outlet></router-outlet>
+  </div>
+</div>

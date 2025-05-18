@@ -1,0 +1,26 @@
+<!-- teacher-availability-add.component.html -->
+<form #f="ngForm" (ngSubmit)="onSubmit(f)" autocomplete="off">
+  
+  <div>
+    <label>Day of Week</label>
+    <select name="dayOfWeek" [(ngModel)]="availabilityService.formData.dayOfWeek" required>
+      <option *ngFor="let d of dayKeys" [ngValue]="d">
+        {{ DayOfWeek[d] }}
+      </option>
+    </select>
+  </div>
+
+  <div>
+    <label>Start Time</label>
+    <input type="text" name="startTime" [(ngModel)]="availabilityService.formData.startTime" required />
+  </div>
+
+  <div>
+    <label>End Time</label>
+    <input type="text" name="endTime" [(ngModel)]="availabilityService.formData.endTime" required />
+  </div>
+
+  <button type="submit" [disabled]="!f.valid">Add Availability</button>
+</form>
+
+<a routerLink="/profile/availabilities" routerLinkActive="active">Back to Availability List</a>

@@ -1,0 +1,11 @@
+<div *ngIf="schedule.length > 0; else noSchedule">
+  <div *ngFor="let item of schedule" class="card p-3 mb-3">
+    <h5>{{ getDayName(item.dayOfWeek) }}</h5>
+    <p><strong>Start Time:</strong> {{ item.startTime }}</p>
+    <p><strong>End Time:</strong> {{ item.endTime }}</p>
+  </div>
+</div>
+
+<ng-template #noSchedule>
+  <p>No schedule found for this student.</p>
+</ng-template>

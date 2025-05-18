@@ -1,0 +1,14 @@
+<footer>
+    <a routerLink="/main" style="margin: 20px;">Main</a>
+    <a routerLink="/teacher-profile" *ngIf="authService.isLoggedIn()" [appHideIfClaimsNotMet]="claimReq.teacherOnly" style="margin: 20px;">TProfile</a>
+    <a routerLink="/student-profile" *ngIf="authService.isLoggedIn()" [appHideIfClaimsNotMet]="claimReq.studentOnly" style="margin: 20px;">SProfile</a>
+    <a routerLink="/user" style="margin: 20px;">User</a>
+</footer>
+
+<div class="container">
+  <div class="row">
+    <div>
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
