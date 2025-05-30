@@ -12,7 +12,7 @@ import { TeacherService } from '../../../shared/teacher/teacher.service';
   selector: 'app-student-teacher',
   standalone: false,
   templateUrl: './student-teacher.component.html',
-  styles: ``
+  styleUrl: '../../user-connection.css'
 })
 export class StudentTeacherComponent {
   teachers: TeacherModel[] = [];

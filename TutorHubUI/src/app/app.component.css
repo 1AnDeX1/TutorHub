@@ -1,0 +1,14 @@
+header {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding: 15px;
+    background-color: #2C3E50;
+    color: wheat;
+    font-size: 18px;
+    height: 30px;
+    width: 100%;
+}
+.container{
+    background-color:  #F9F6F1;
+}

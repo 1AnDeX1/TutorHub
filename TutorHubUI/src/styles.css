@@ -1,3 +1,14 @@
 form.submitted input.ng-invalid{
     border-color: red;
 }
+
+a {
+    color: inherit;
+    text-decoration: inherit;
+}
+body {
+    margin: 0;
+    font-family: 'Copperplate Gothic Light', sans-serif;
+    background-color: #F9F6F1;
+    height: 100%;
+}

@@ -1,0 +1,18 @@
+<div *ngIf="loading" class="loading">
+  <p>Loading chats...</p>
+</div>
+
+<div *ngIf="error" class="error">
+  <p>{{ error }}</p>
+</div>
+
+<div *ngIf="!loading && !error">
+  <h1>Your Chats</h1>
+  <ul class="chat-list">
+    <li *ngFor="let chat of chats" class="chat-item">
+      <a [routerLink]="['../chat', chat.id]" class="chat-link">
+        Chat with Student ID: {{ chat.studentId }}
+      </a>
+    </li>
+  </ul>
+</div>

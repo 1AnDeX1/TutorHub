@@ -1,77 +1,130 @@
-<form #form="ngForm" (ngSubmit)="onSubmit(form)" 
-      [class.submitted]="formSubmitted" novalidate autocomplete="off">
-
+<form
+  #form="ngForm"
+  (ngSubmit)="onSubmit(form)"
+  [class.submitted]="formSubmitted"
+  novalidate
+  autocomplete="off"
+>
   <div>
     <label>User Name</label>
-    <input type="text" name="userName" required
-           [(ngModel)]="formData.userName" #userName="ngModel" placeholder="User Name">
-    <div *ngIf="userName.invalid && (userName.dirty || userName.touched)">
+    <input
+      class="input-field"
+      type="text"
+      name="userName"
+      required
+      [(ngModel)]="formData.userName"
+      #userName="ngModel"
+      placeholder="User Name"
+    />
+    <div *ngIf="userName.invalid && (userName.dirty || userName.touched)" class="error">
       <small>User Name is required.</small>
     </div>
   </div>
 
   <div>
     <label>Email</label>
-    <input type="email" name="email" required
-           [(ngModel)]="formData.email" #email="ngModel" placeholder="Email">
-    <div *ngIf="email.invalid && (email.dirty || email.touched)">
+    <input
+      class="input-field"
+      type="email"
+      name="email"
+      required
+      [(ngModel)]="formData.email"
+      #email="ngModel"
+      placeholder="Email"
+    />
+    <div *ngIf="email.invalid && (email.dirty || email.touched)" class="error">
       <small>Valid email is required.</small>
     </div>
   </div>
 
   <div>
     <label>Password</label>
-    <input type="password" name="password" required minlength="6"
-           [(ngModel)]="formData.password" #password="ngModel" placeholder="Password">
-    <div *ngIf="password.invalid && (password.dirty || password.touched)">
+    <input
+      class="input-field"
+      type="password"
+      name="password"
+      required
+      minlength="6"
+      [(ngModel)]="formData.password"
+      #password="ngModel"
+      placeholder="Password"
+    />
+    <div *ngIf="password.invalid && (password.dirty || password.touched)" class="error">
       <small>Password is required (min 6 characters).</small>
     </div>
   </div>
 
   <div>
     <label>Subjects</label>
-    <select name="subjects" multiple required
-            [(ngModel)]="formData.subjects" #subjects="ngModel">
+    <select
+      class="input-field"
+      name="subjects"
+      multiple
+      required
+      [(ngModel)]="formData.subjects"
+      #subjects="ngModel"
+    >
       <option *ngFor="let key of subjectKeys" [ngValue]="key">
         {{ subjectEnum[key] }}
       </option>
     </select>
-    <div *ngIf="subjects.invalid && (subjects.dirty || subjects.touched)">
+    <div *ngIf="subjects.invalid && (subjects.dirty || subjects.touched)" class="error">
       <small>Please select at least one subject.</small>
     </div>
   </div>
 
   <div>
     <label>Hourly Rate</label>
-    <input type="number" name="hourlyRate" required min="0"
-           [(ngModel)]="formData.hourlyRate" #hourlyRate="ngModel" placeholder="Hourly Rate">
-    <div *ngIf="hourlyRate.invalid && (hourlyRate.dirty || hourlyRate.touched)">
+    <input
+      class="input-field"
+      type="number"
+      name="hourlyRate"
+      required
+      min="0"
+      [(ngModel)]="formData.hourlyRate"
+      #hourlyRate="ngModel"
+      placeholder="Hourly Rate"
+    />
+    <div *ngIf="hourlyRate.invalid && (hourlyRate.dirty || hourlyRate.touched)" class="error">
       <small>Hourly Rate is required and must be non-negative.</small>
     </div>
   </div>
 
   <div>
     <label>Age</label>
-    <input type="number" name="age" required min="18"
-           [(ngModel)]="formData.age" #age="ngModel" placeholder="Age">
-    <div *ngIf="age.invalid && (age.dirty || age.touched)">
+    <input
+      class="input-field"
+      type="number"
+      name="age"
+      required
+      min="18"
+      [(ngModel)]="formData.age"
+      #age="ngModel"
+      placeholder="Age"
+    />
+    <div *ngIf="age.invalid && (age.dirty || age.touched)" class="error">
       <small>Age is required and must be 18 or older.</small>
     </div>
   </div>
 
   <div>
     <label>Description</label>
-    <textarea name="description" [(ngModel)]="formData.description" placeholder="Description"></textarea>
+    <textarea
+      class="input-field"
+      name="description"
+      [(ngModel)]="formData.description"
+      placeholder="Description"
+    ></textarea>
   </div>
 
   <div>
     <label>Online</label>
-    <input type="checkbox" name="online" [(ngModel)]="formData.online">
+    <input type="checkbox" name="online" [(ngModel)]="formData.online" />
   </div>
 
   <div>
     <label>Offline</label>
-    <input type="checkbox" name="offline" [(ngModel)]="formData.offline">
+    <input type="checkbox" name="offline" [(ngModel)]="formData.offline" />
   </div>
 
   <div>

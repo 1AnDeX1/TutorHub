@@ -1,0 +1,71 @@
+.connections{
+    margin: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.switch-btn{
+    padding: 10px 0;
+    font-weight: bold;
+    border-radius: 6px;
+}
+.switch-btn:hover{
+    padding: 10px 0;
+    background-color: wheat;
+}
+
+.students-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 0;
+  list-style: none;
+}
+
+.user-item {
+  flex: 1 1 calc(33.333% - 16px);
+  box-sizing: border-box;
+  border-right: 2px solid #2C3E50;
+  border-left: 2px solid #2C3E50;
+  padding: 12px;
+  border-radius: 6px;
+  background: #fafafa;
+}
+
+@media (max-width: 768px) {
+  .user-item {
+    flex: 1 1 calc(50% - 16px);
+  }
+}
+
+@media (max-width: 480px) {
+  .user-item {
+    flex: 1 1 100%;
+  }
+}
+
+.user-item-info{
+  padding: 0 20px;
+}
+.status-btn{
+  margin: 0 20px;
+  padding: 5px 2px;
+  font-weight: bold;
+  border-radius: 6px;
+}
+
+.teachers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.teacher-card {
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}

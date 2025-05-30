@@ -1,0 +1,46 @@
+<div *ngIf="isLoading; else studentListTemplate">
+  <p>Loading student data...</p>
+</div>
+
+<ng-template #studentListTemplate>
+  <h2>Student List</h2>
+
+  <div *ngIf="students.length > 0; else noStudents">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Age</th>
+          <th>Grade</th>
+          <th>Description</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of students; let i = index">
+          <td>{{ i + 1 }}</td>
+          <td>{{ student.userName }}</td>
+          <td>{{ student.email }}</td>
+          <td>{{ student.age }}</td>
+          <td>{{ student.grade || 'N/A' }}</td>
+          <td>{{ student.description || 'N/A' }}</td>
+          <td>
+            <button
+              class="btn btn-danger btn-sm"
+              (click)="deleteStudent(student.id)"
+            >
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>Total students: {{ totalStudents }}</p>
+  </div>
+
+  <ng-template #noStudents>
+    <p>No students available.</p>
+  </ng-template>
+</ng-template>

@@ -3,81 +3,71 @@ using TutorHub.DataAccess.Data;
 using TutorHub.DataAccess.Entities;
 using TutorHub.DataAccess.IRepositories;
 
-namespace TutorHub.DataAccess.Repositories
+namespace TutorHub.DataAccess.Repositories;
+
+public class TeacherAvailabilityRepository(ApplicationDbContext context) : ITeacherAvailabilityRepository
 {
-    public class TeacherAvailabilityRepository : ITeacherAvailabilityRepository
+    public async Task<IEnumerable<TeacherAvailability>> GetByTeacherIdAsync(int teacherId)
     {
-        private readonly ApplicationDbContext _context;
+        return await context.TeacherAvailabilities
+            .AsNoTracking()
+            .Where(a => a.TeacherId == teacherId)
+            .ToListAsync();
+    }
 
-        public TeacherAvailabilityRepository(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+    public async Task<TeacherAvailability?> GetAvailabilityByIdAsync(int availabilityId)
+    {
+        return await context.TeacherAvailabilities.AsNoTracking().FirstOrDefaultAsync(a => a.Id == availabilityId);
+    }
 
-        public async Task<IEnumerable<TeacherAvailability>> GetByTeacherIdAsync(int teacherId)
-        {
-            return await _context.TeacherAvailabilities
-                .AsNoTracking()
-                .Where(a => a.TeacherId == teacherId)
-                .ToListAsync();
-        }
+    public async Task<IEnumerable<TeacherAvailability>> GetAvailabilitiesAsync(
+        int teacherId, DayOfWeek day, TimeOnly startTime, TimeOnly endTime)
+    {
+        return await context.TeacherAvailabilities
+            .Where(a =>
+                a.TeacherId == teacherId &&
+                a.DayOfWeek == day &&
+                startTime < a.EndTime &&
+                endTime > a.StartTime)
+            .ToListAsync();
+    }
 
-        public async Task<TeacherAvailability?> GetAvailabilityByIdAsync(int availabilityId)
-        {
-            return await _context.TeacherAvailabilities.AsNoTracking().FirstOrDefaultAsync(a => a.Id == availabilityId);
-        }
+    public async Task AddAsync(TeacherAvailability availability)
+    {
+        await context.TeacherAvailabilities.AddAsync(availability);
+    }
 
-        public async Task<IEnumerable<TeacherAvailability>> GetAvailabilitiesAsync(
-            int teacherId, DayOfWeek day, TimeOnly startTime, TimeOnly endTime)
-        {
-            return await _context.TeacherAvailabilities
-                .Where(a =>
-                    a.TeacherId == teacherId &&
-                    a.DayOfWeek == day &&
-                    startTime < a.EndTime &&
-                    endTime > a.StartTime)
-                .ToListAsync();
-        }
+    public void Update(TeacherAvailability availability)
+    {
+        context.TeacherAvailabilities.Update(availability);
+    }
 
-        public async Task AddAsync(TeacherAvailability availability)
+    public async Task DeleteAsync(int availabilityId)
+    {
+        var availability = await context.TeacherAvailabilities.FindAsync(availabilityId);
+        if (availability != null)
         {
-            await _context.TeacherAvailabilities.AddAsync(availability);
+            context.TeacherAvailabilities.Remove(availability);
         }
+    }
 
-        public void Update(TeacherAvailability availability)
-        {
-            _context.TeacherAvailabilities.Update(availability);
-        }
+    public async Task<bool> IsSlotAvailableAsync(int teacherId, DayOfWeek day, TimeOnly startTime, TimeOnly endTime)
+    {
+        return await context.TeacherAvailabilities
+            .AsNoTracking()
+            .AnyAsync(a =>
+                a.TeacherId == teacherId &&
+                a.DayOfWeek == day &&
+                startTime < a.EndTime &&
+                endTime > a.StartTime);
+    }
 
-        public async Task DeleteAsync(int availabilityId)
-        {
-            var availability = await _context.TeacherAvailabilities.FindAsync(availabilityId);
-            if (availability != null)
-            {
-                _context.TeacherAvailabilities.Remove(availability);
-            }
-        }
-
-        public async Task<bool> IsSlotAvailableAsync(int teacherId, DayOfWeek day, TimeOnly startTime, TimeOnly endTime)
-        {
-            return await _context.TeacherAvailabilities
-                .AsNoTracking()
-                .AnyAsync(a =>
-                    a.TeacherId == teacherId &&
-                    a.DayOfWeek == day &&
-                    startTime < a.EndTime &&
-                    endTime > a.StartTime);
-        }
-
-        public async Task<bool> IsSlotAvailableForUpdateAsync(int teacherId, DayOfWeek day, TimeOnly startTime, TimeOnly endTime, int excludeAvailabilityId)
-        {
-            return !await _context.TeacherAvailabilities
-                .AsNoTracking()
-                .Where(a => a.TeacherId == teacherId && a.DayOfWeek == day)
-                .Where(a => a.Id != excludeAvailabilityId)
-                .AnyAsync(a =>
-                    (startTime < a.EndTime && endTime > a.StartTime)
-                );
-        }
+    public async Task<bool> IsSlotAvailableForUpdateAsync(int teacherId, DayOfWeek day, TimeOnly startTime, TimeOnly endTime, int excludeAvailabilityId)
+    {
+        return !await context.TeacherAvailabilities
+            .AsNoTracking()
+            .Where(a => a.TeacherId == teacherId && a.DayOfWeek == day)
+            .Where(a => a.Id != excludeAvailabilityId)
+            .AnyAsync(a => startTime < a.EndTime && endTime > a.StartTime);
     }
 }

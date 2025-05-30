@@ -13,7 +13,7 @@ import { TeacherCreateModel } from "../../../shared/teacher/teacherModels/teache
   selector: 'app-teacher-profile-details',
   standalone: false,
   templateUrl: './teacher-profile-details.component.html',
-  styles: ``
+  styleUrl: '../../user-profile-details.css'
 })
 export class TeacherProfileDetailsComponent implements OnInit {
   teacherId: number | null = null;
@@ -49,7 +49,7 @@ export class TeacherProfileDetailsComponent implements OnInit {
     this.isLoading = true;
     this.teacherService.getTeacherById(this.teacherId!).subscribe({
       next: (data) => {
-        this.teacher = { ...data, password: ''}; // required field workaround
+        this.teacher = { ...data, password: ''};
         this.verificationEnum = data.verificationStatus
         this.isLoading = false;
       },

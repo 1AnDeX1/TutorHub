@@ -1,0 +1,62 @@
+h2 {
+  text-align: center;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+td {
+  font-size: 12px;
+  font-weight: bold;
+  padding: 12px;
+  text-align: center;
+}
+
+.availability-table td, th {
+  border-right: 2px solid #2C3E50;
+}
+
+.availability-table td:last-child, th:last-child {
+  border-right: none;
+}
+
+.slot-box {
+  border: 2px solid #2C3E50;
+  border-radius: 20px;
+  padding: 5px 10px;
+  margin-bottom: 5px;
+}
+
+.slot-box:hover {
+  background-color: wheat;
+}
+
+.availability-form {
+  display: flex;
+  flex-direction: column;
+  width: 300px;
+}
+
+.availability-form div {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 10px;
+}
+
+button {
+  text-align: end;
+  margin: 3px 0;
+  background-color: transparent;
+}
+
+.availability-form input, select {
+  width: 150px;
+  border: none;
+  border-bottom: 1px solid #000;
+  background-color: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  outline: none;
+}

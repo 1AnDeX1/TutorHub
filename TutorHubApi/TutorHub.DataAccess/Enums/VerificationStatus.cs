@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace TutorHub.DataAccess.Enums;
 
-namespace TutorHub.DataAccess.Enums
+public enum VerificationStatus
 {
-    public enum VerificationStatus
-    {
-        NotRequested,
-        Pending,
-        Approved,
-        Rejected
-    }
+    NotRequested,
+    Pending,
+    Approved,
+    Rejected
 }

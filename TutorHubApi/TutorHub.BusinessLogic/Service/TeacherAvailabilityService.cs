@@ -5,69 +5,61 @@ using TutorHub.BusinessLogic.Models.Schedules;
 using TutorHub.DataAccess.Entities;
 using TutorHub.DataAccess.IRepositories;
 
-namespace TutorHub.BusinessLogic.Service
+namespace TutorHub.BusinessLogic.Service;
+
+public class TeacherAvailabilityService(
+    IUnitOfWork unitOfWork,
+    IMapper mapper) : ITeacherAvailabilityService
 {
-    public class TeacherAvailabilityService : ITeacherAvailabilityService
+    public async Task<IEnumerable<TeacherAvailabilityModel>> GetByTeacherIdAsync(int teacherId)
     {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IMapper _mapper;
+        var teacher = await unitOfWork.TeacherAvailabilities.GetByTeacherIdAsync(teacherId);
 
-        public TeacherAvailabilityService(
-            IUnitOfWork unitOfWork,
-            IMapper mapper)
+        return mapper.Map<IEnumerable<TeacherAvailabilityModel>>(teacher);
+    }
+
+    public async Task AddAsync(int teacherId, TeacherAvailabilityRequest request)
+    {
+        if (!await unitOfWork.TeacherAvailabilities.IsSlotAvailableAsync(teacherId, request.DayOfWeek, request.StartTime, request.EndTime) &&
+            !await unitOfWork.Schedules.IsScheduleSlotTakenAsync(teacherId, request.DayOfWeek, request.StartTime, request.EndTime))
         {
-            _unitOfWork = unitOfWork;
-            _mapper = mapper;
-        }
+            var availability = mapper.Map<TeacherAvailability>(request);
+            availability.TeacherId = teacherId;
 
-        public async Task<IEnumerable<TeacherAvailabilityModel>> GetByTeacherIdAsync(int teacherId)
+            await unitOfWork.TeacherAvailabilities.AddAsync(availability);
+            await unitOfWork.SaveAsync();
+        }
+        else
+            throw new ValidationException("This time slot is already occupied."); 
+    }
+
+    public async Task UpdateAsync(int id, UpdateAvailabilityRequest request)
+    {
+        var availability = await unitOfWork.TeacherAvailabilities.GetAvailabilityByIdAsync(id)
+            ?? throw new NotFoundException("Availability not found.");
+
+        if (await unitOfWork.TeacherAvailabilities
+            .IsSlotAvailableForUpdateAsync(availability.TeacherId, request.DayOfWeek, request.StartTime, request.EndTime, id) &&
+            !await unitOfWork.Schedules.IsScheduleSlotTakenAsync(availability.TeacherId, request.DayOfWeek, request.StartTime, request.EndTime))
         {
-            var teacher = await _unitOfWork.TeacherAvailabilities.GetByTeacherIdAsync(teacherId);
+            var updatedAvailability = mapper.Map<TeacherAvailability>(request);
 
-            return _mapper.Map<IEnumerable<TeacherAvailabilityModel>>(teacher);
+            updatedAvailability.Id = availability.Id;
+            updatedAvailability.TeacherId = availability.TeacherId;
+
+            unitOfWork.TeacherAvailabilities.Update(updatedAvailability);
+            await unitOfWork.SaveAsync();
         }
+        else 
+            throw new ValidationException("This time slot is already occupied.");
+    }
 
-        public async Task AddAsync(int teacherId, TeacherAvailabilityRequest request)
-        {
-            if (!await _unitOfWork.TeacherAvailabilities.IsSlotAvailableAsync(teacherId, request.DayOfWeek, request.StartTime, request.EndTime))
-            {
-                var availability = _mapper.Map<TeacherAvailability>(request);
-                availability.TeacherId = teacherId;
+    public async Task RemoveAsync(int id)
+    {
+        _ = await unitOfWork.TeacherAvailabilities.GetAvailabilityByIdAsync(id)
+            ?? throw new NotFoundException($"Availability with Id {id} not found.");
 
-                await _unitOfWork.TeacherAvailabilities.AddAsync(availability);
-                await _unitOfWork.SaveAsync();
-            }
-            else
-                throw new ValidationException("This time slot is already occupied."); 
-        }
-
-        public async Task UpdateAsync(int id, UpdateAvailabilityRequest request)
-        {
-            var availability = await _unitOfWork.TeacherAvailabilities.GetAvailabilityByIdAsync(id)
-                ?? throw new NotFoundException("Availability not found.");
-
-            if (await _unitOfWork.TeacherAvailabilities
-                .IsSlotAvailableForUpdateAsync(availability.TeacherId, request.DayOfWeek, request.StartTime, request.EndTime, id))
-            {
-                var updatedAvailability = _mapper.Map<TeacherAvailability>(request);
-
-                updatedAvailability.Id = availability.Id;
-                updatedAvailability.TeacherId = availability.TeacherId;
-
-                _unitOfWork.TeacherAvailabilities.Update(updatedAvailability);
-                await _unitOfWork.SaveAsync();
-            }
-            else 
-                throw new ValidationException("This time slot is already occupied.");
-        }
-
-        public async Task RemoveAsync(int id)
-        {
-            _ = await _unitOfWork.TeacherAvailabilities.GetAvailabilityByIdAsync(id)
-                ?? throw new NotFoundException($"Availability with Id {id} not found.");
-
-            await _unitOfWork.TeacherAvailabilities.DeleteAsync(id);
-            await _unitOfWork.SaveAsync();
-        }
+        await unitOfWork.TeacherAvailabilities.DeleteAsync(id);
+        await unitOfWork.SaveAsync();
     }
 }

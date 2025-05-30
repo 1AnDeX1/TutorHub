@@ -4,76 +4,89 @@ using TutorHub.BusinessLogic.IServices.IUserServices;
 using TutorHub.BusinessLogic.Models.Schedules;
 using TutorHub.BusinessLogic.IServices;
 using Microsoft.AspNetCore.Authorization;
+using TutorHub.BusinessLogic.Models.Chat;
+using TutorHub.BusinessLogic.Service;
 
-namespace TutorHub.WebApi.Controllers
+namespace TutorHub.WebApi.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+[Authorize]
+public class StudentsController(
+    IStudentService studentService,
+    IScheduleService scheduleService,
+    IChatService chatService) : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    [Authorize]
-    public class StudentsController(
-        IStudentService studentService,
-        IScheduleService scheduleService) : ControllerBase
+
+    [HttpGet]
+    public async Task<ActionResult<(IEnumerable<StudentModel> students, int studentsCount)>> GetAllStudents
+        (string? name, int page = 1, int pageSize = 20)
     {
+        var studentsObject = await studentService.GetAllAsync(name, page, pageSize);
+        return Ok(new { studentsObject.students, studentsObject.studentsCount });
+    }
 
-        [HttpGet]
-        public async Task<ActionResult<(IEnumerable<StudentModel> students, int studentsCount)>> GetAllStudents
-            (string? name, int page = 1, int pageSize = 20)
+    [HttpGet("{id}")]
+    public async Task<ActionResult<StudentModel>> GetStudentById(int id)
+    {
+        var student = await studentService.GetByIdAsync(id);
+        if (student == null)
         {
-            var studentsObject = await studentService.GetAllAsync(name, page, pageSize);
-            return Ok(new { studentsObject.students, studentsObject.studentsCount });
+            return NotFound();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<StudentModel>> GetStudentById(int id)
-        {
-            var student = await studentService.GetByIdAsync(id);
-            if (student == null)
-            {
-                return NotFound();
-            }
+        return Ok(student);
+    }
 
-            return Ok(student);
+    [HttpGet("{studentId}/schedule")]
+    public async Task<ActionResult<StudentScheduleModel>> GetScheduleByStudentId(int studentId)
+    {
+        var schedule = await scheduleService.GetByStudentIdAsync(studentId);
+
+        return Ok(schedule);
+    }
+
+    [HttpGet("chats/{studentId}")]
+    public async Task<ActionResult<IEnumerable<ChatModel>>> GetChatsByStudentId(int studentId)
+    {
+        var chat = await chatService.GetAllByStudentIdAsync(studentId);
+
+        if (chat == null)
+            return NotFound();
+
+        return Ok(chat);
+    }
+
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> CreateStudent([FromBody] StudentCreateModel studentCreateModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest("Student creation failed due to invalid model.");
         }
 
-        [HttpGet("{studentId}/schedule")]
-        public async Task<ActionResult<ScheduleModel>> GetScheduleByStudentId(int studentId)
-        {
-            var schedule = await scheduleService.GetByStudentIdAsync(studentId);
+        await studentService.CreateAsync(studentCreateModel);
 
-            return Ok(schedule);
+        return CreatedAtAction(nameof(CreateStudent), new { succeeded = true, message = "User registered successfully" });
+    }
+
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateStudent(int id, [FromBody] StudentCreateModel studentCreateModel)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest("Student updating failed due to invalid model.");
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> CreateStudent([FromBody] StudentCreateModel studentCreateModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Student creation failed due to invalid model.");
-            }
+        _ = await studentService.UpdateAsync(id, studentCreateModel);
+        return NoContent();
+    }
 
-            await studentService.CreateAsync(studentCreateModel);
-
-            return CreatedAtAction(nameof(CreateStudent), new { succeeded = true, message = "User registered successfully" });
-        }
-
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateStudent(int id, [FromBody] StudentCreateModel studentCreateModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Student updating failed due to invalid model.");
-            }
-
-            _ = await studentService.UpdateAsync(id, studentCreateModel);
-            return NoContent();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteStudent(int id)
-        {
-            await studentService.DeleteAsync(id);
-            return NoContent();
-        }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteStudent(int id)
+    {
+        await studentService.DeleteAsync(id);
+        return NoContent();
     }
 }

@@ -1,30 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using TutorHub.BusinessLogic.FilterPipe;
 using TutorHub.BusinessLogic.Models;
 using TutorHub.BusinessLogic.Models.User.Teacher;
-using TutorHub.DataAccess.Entities;
+using TutorHub.BusinessLogic.Models.User.Teachers;
 
-namespace TutorHub.BusinessLogic.IServices.IUserServices
+namespace TutorHub.BusinessLogic.IServices.IUserServices;
+
+public interface ITeacherService
 {
-    public interface ITeacherService
-    {
-        Task<(IEnumerable<TeacherModel> teachers, int teachersCount)> GetAllAsync(string? name, int page, int pageSize);
+    Task<(IEnumerable<TeacherModel> teachers, int teachersCount)> GetAllAsync(string? name, int page, int pageSize);
 
-        Task<(IEnumerable<TeacherModel> teachers, int teachersCount)> GetAvailableTeachersAsync(string? name, int page, int pageSize);
+    Task<PagedTeacherResult> GetAvailableTeachersAsync(TeacherFilter filter);
 
-        Task<TeacherModel?> GetByIdAsync(int id);
+    Task<PagedTeacherResult> GetBestTeachersAsync(TeacherFilter filter);
 
-        Task<TeacherModel> CreateAsync(TeacherCreateModel teacherCreateModel);
+    Task<TeacherModel?> GetByIdAsync(int id);
 
-        Task<TeacherModel> UpdateAsync(int id, TeacherCreateModel teacherCreateModel);
+    Task<TeacherModel> CreateAsync(TeacherCreateModel teacherCreateModel);
 
-        Task SendVerificationRequestAsync(int id);
+    Task<TeacherModel> UpdateAsync(int id, TeacherCreateModel teacherCreateModel);
 
-        Task RateTeacherAsync(TeacherRatingModel teacherRatingModel);
+    Task SendVerificationRequestAsync(int id);
 
-        Task DeleteAsync(int id);
-    }
+    Task RateTeacherAsync(TeacherRatingModel teacherRatingModel);
+
+    Task DeleteAsync(int id);
 }

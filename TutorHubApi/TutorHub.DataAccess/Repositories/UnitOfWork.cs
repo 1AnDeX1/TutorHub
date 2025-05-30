@@ -1,6 +1,6 @@
 ﻿using TutorHub.DataAccess.Data;
 using TutorHub.DataAccess.IRepositories;
-using TutorHub.DataAccess.IRepositories.UserInterfaces;
+using TutorHub.DataAccess.IRepositories.IUserRepositories;
 
 namespace TutorHub.DataAccess.Repositories;
 public class UnitOfWork(ApplicationDbContext context,
@@ -10,7 +10,9 @@ public class UnitOfWork(ApplicationDbContext context,
     IScheduleRepository scheduleRepository,
     IStudentTeacherRepository studentTeacherRepository,
     ITeacherAvailabilityRepository teacherAvailabilityRepository,
-    ITeacherRatingRepository teacherRatingRepository) : IUnitOfWork
+    ITeacherRatingRepository teacherRatingRepository,
+    IChatRepository chatRepository,
+    IChatMessageRepository chatMessageRepository) : IUnitOfWork
 
 {
     public IStudentRepository Students => studentRepository;
@@ -26,6 +28,10 @@ public class UnitOfWork(ApplicationDbContext context,
     public ITeacherAvailabilityRepository TeacherAvailabilities => teacherAvailabilityRepository;
 
     public ITeacherRatingRepository TeacherRatings => teacherRatingRepository;
+
+    public IChatRepository Chats => chatRepository;
+
+    public IChatMessageRepository ChatMessages => chatMessageRepository;
 
     public async Task SaveAsync()
     {

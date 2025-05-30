@@ -1,7 +1,4 @@
-﻿using Azure.Core;
-using Microsoft.Extensions.Logging;
-using Microsoft.IdentityModel.Tokens;
-using TutorHub.BusinessLogic.Exceptions;
+﻿using TutorHub.BusinessLogic.Exceptions;
 using TutorHub.BusinessLogic.Models.StudentTeacher;
 using TutorHub.BusinessLogic.Models.User;
 using TutorHub.BusinessLogic.Models.User.Student;
@@ -9,7 +6,6 @@ using TutorHub.BusinessLogic.Models.User.Teacher;
 using TutorHub.DataAccess.Entities;
 using TutorHub.DataAccess.Enums;
 using TutorHub.DataAccess.IRepositories;
-using TutorHub.DataAccess.Repositories;
 
 namespace TutorHub.BusinessLogic.Validations;
 
@@ -90,7 +86,6 @@ public class Validator(IUnitOfWork unitOfWork) : IValidator
     }
 
     // StudentTeacher
-
     public async Task ValidateStudentTeacherRequestModel(StudentTeacherRequestModel request)
     {
         _ = await unitOfWork.Students.GetByIdAsync(request.StudentId)
@@ -161,7 +156,7 @@ public class Validator(IUnitOfWork unitOfWork) : IValidator
         }
     }
 
-    // schedule
+    // Schedule
     public async Task ValidateScheduleCreateUpdate(Schedule schedule)
     {
         var studentTeacher = await unitOfWork.StudentTeachers.GetByIdAsync(schedule.StudentTeacherId)
@@ -204,5 +199,4 @@ public class Validator(IUnitOfWork unitOfWork) : IValidator
             throw new ValidationException("Invalid email address format");
         }
     }
-
 }

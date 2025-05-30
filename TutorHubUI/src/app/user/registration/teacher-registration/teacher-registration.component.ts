@@ -10,7 +10,7 @@ import { TeacherCreateModel } from '../../../shared/teacher/teacherModels/teache
   selector: 'app-teacher-registration',
   standalone: false,
   templateUrl: './teacher-registration.component.html',
-  styles: ``
+  styleUrl: './../../user.component.css'
 })
 export class TeacherRegistrationComponent {
   subjectEnum = Subject;
@@ -38,7 +38,6 @@ export class TeacherRegistrationComponent {
           this.router.navigate(['/main']);
         },
         error: err => {
-          this.toastr.error(err.error || 'Error occurred', "Validation Error");
         }
       });
     }

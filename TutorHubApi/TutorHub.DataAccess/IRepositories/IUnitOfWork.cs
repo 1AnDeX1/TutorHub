@@ -1,5 +1,5 @@
-﻿using TutorHub.DataAccess.IRepositories;
-using TutorHub.DataAccess.IRepositories.UserInterfaces;
+﻿using TutorHub.DataAccess.IRepositories.IUserRepositories;
+using TutorHub.DataAccess.IRepositories.IUserRepositories;
 
 namespace TutorHub.DataAccess.IRepositories;
 public interface IUnitOfWork
@@ -17,6 +17,10 @@ public interface IUnitOfWork
     ITeacherAvailabilityRepository TeacherAvailabilities { get; }
 
     ITeacherRatingRepository TeacherRatings { get; }
+
+    IChatRepository Chats { get; }
+
+    IChatMessageRepository ChatMessages { get; }
 
     Task SaveAsync();
 }

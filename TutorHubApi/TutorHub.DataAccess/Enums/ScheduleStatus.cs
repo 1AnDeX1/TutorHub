@@ -1,8 +1,7 @@
-﻿namespace TutorHub.DataAccess.Enums
+﻿namespace TutorHub.DataAccess.Enums;
+
+public enum ScheduleStatus
 {
-    public enum ScheduleStatus
-    {
-        Confirmed,
-        Requested
-    }
+    Confirmed,
+    Requested
 }

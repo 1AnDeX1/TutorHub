@@ -1,17 +1,83 @@
-<div>
-  <h1>Teachers</h1>
+<div class="main-page">
+  <div class="filter">
+    <h1 class="title">Filter</h1>
 
-  <ul *ngIf="teacherService.list.length > 0; else noTeachers">
-    <li *ngFor="let tm of teacherService.list">
-      <a [routerLink]="['/teachers', tm.id]" class="btn btn-primary" style="margin-top: 10px;">
-        <div style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 8px;">
+    <div *ngFor="let subject of subjectOptions">
+      <label class="subject-label">
+        <input
+          type="checkbox"
+          [value]="subject.value"
+          [checked]="filter.subjects?.includes(subject.value)"
+          (change)="onSubjectToggle(subject.value, $event)"
+        />
+        {{ subject.key }}
+      </label>
+    </div>
+
+    <div>
+      <label class="label-column">Min Hourly Rate:
+        <input type="number" [(ngModel)]="filter.minHourlyRate" />
+      </label>
+    </div>
+
+    <div>
+      <label class="label-column">Max Hourly Rate:
+        <input type="number" [(ngModel)]="filter.maxHourlyRate" />
+      </label>
+    </div>
+
+    <div>
+      <label>Online:
+        <input type="checkbox" [(ngModel)]="filter.online" />
+      </label>
+    </div>
+
+    <div>
+      <label>Offline:
+        <input type="checkbox" [(ngModel)]="filter.offline" />
+      </label>
+    </div>
+
+    <div>
+      <label class="label-column">Min Age:
+        <input type="number" [(ngModel)]="filter.minAge" />
+      </label>
+    </div>
+
+    <div>
+      <label class="label-column">Max Age:
+        <input type="number" [(ngModel)]="filter.maxAge" />
+      </label>
+    </div>
+
+    <div>
+      <label class="label-column">Verification Status:
+        <select (change)="onVerificationChange($event)">
+          <option value="">All</option>
+          <option *ngFor="let v of verificationOptions" [value]="v.value">
+            {{ v.key }}
+          </option>
+        </select>
+      </label>
+    </div>
+
+    <button (click)="applyFilters()">Apply Filters</button>
+    <button (click)="applyFilters()">Find best teachers for you</button>
+  </div>
+
+  <div class="list">
+    <h1 class="title">Teachers</h1>
+    <div *ngIf="teacherService.list.length > 0; else noTeachers" class="teacher-block">
+      <div *ngFor="let tm of teacherService.list" [routerLink]="['/teachers', tm.id]" class="teacher-item">
+        <img src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=" alt="">
+        <div class="teacher-item-info">
           <strong>Name:</strong> {{ tm.userName }}<br>
           <strong>Email:</strong> {{ tm.email }}<br>
 
           <strong>Subjects:</strong>
           <ng-container *ngIf="tm.subjects.length > 0; else noSubjects">
             <span *ngFor="let s of tm.subjects; let i = index">
-              {{ subjectEnum[s] }}<span *ngIf="i < tm.subjects.length - 1">, </span>
+              {{ s }}<span *ngIf="i < tm.subjects.length - 1">, </span>
             </span>
           </ng-container>
           <ng-template #noSubjects>No subjects</ng-template>
@@ -22,18 +88,19 @@
           <strong>Online:</strong> {{ tm.online ? 'Yes' : 'No' }}<br>
           <strong>Offline:</strong> {{ tm.offline ? 'Yes' : 'No' }}<br>
           <strong>Age:</strong> {{ tm.age }}<br>
-          <strong>Description:</strong> {{ tm.description || 'N/A' }}<br>
-          <strong>Verification Status:</strong> {{ verificationEnum[tm.verificationStatus!] || 'Unknown' }}
-
-          <div style="margin-top: 8px;">
-            <i class="fa-solid fa-trash-can" (click)="deleteTeacher(tm.id)" style="cursor: pointer; color: red;"></i>
-          </div>
+          <strong>Verification Status:</strong> {{ tm.verificationStatus }}
         </div>
-      </a>
-    </li>
-  </ul>
+      </div>
+    </div>
 
-  <ng-template #noTeachers>
-    <p>No teachers available.</p>
-  </ng-template>
+    <ng-template #noTeachers>
+      <p>No teachers available.</p>
+    </ng-template>
+
+    <div class="pagination">
+      <button (click)="prevPage()" [disabled]="filter.page === 1">Previous</button>
+      <span>Page {{ filter.page }} of {{ totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="filter.page === totalPages">Next</button>
+    </div>
+  </div>
 </div>

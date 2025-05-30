@@ -1,67 +1,94 @@
-<div *ngIf="teacher; else loading">
-  <h2>{{ teacher.userName }}</h2>
-  <p><strong>Email:</strong> {{ teacher.email }}</p>
-  <p><strong>Subjects:</strong>
-    <ng-container *ngIf="teacher.subjects.length > 0; else noSubjects">
-      <span *ngFor="let s of teacher.subjects; let i = index">
-        {{ subjectEnum[s] }}<span *ngIf="i < teacher.subjects.length - 1">, </span>
-      </span>
-    </ng-container>
-    <ng-template #noSubjects>No subjects</ng-template>
-  </p>
-  <p><strong>Hourly Rate:</strong> {{ teacher.hourlyRate | currency }}</p>
-  <p><strong>Rating:</strong> {{ teacher.rating }} / 5</p>
-  <p><strong>Online:</strong> {{ teacher.online ? 'Yes' : 'No' }}</p>
-  <p><strong>Offline:</strong> {{ teacher.offline ? 'Yes' : 'No' }}</p>
-  <p><strong>Age:</strong> {{ teacher.age }}</p>
-  <p><strong>Description:</strong> {{ teacher.description || 'N/A' }}</p>
-  <p><strong>Verification Status:</strong> {{ verificationEnum[teacher.verificationStatus!] || 'Unknown' }}</p>
-</div>
+<div class="main">
+  <div *ngIf="teacher; else loading" class="teacher-details">
+    <h2>{{ teacher.userName }}</h2>
+    <p><strong>Email:</strong> {{ teacher.email }}</p>
+    <p><strong>Subjects:</strong>
+      <ng-container *ngIf="teacher.subjects.length > 0; else noSubjects">
+        <span *ngFor="let s of teacher.subjects; let i = index">
+          {{ subjectEnum[s] }}<span *ngIf="i < teacher.subjects.length - 1">, </span>
+        </span>
+      </ng-container>
+      <ng-template #noSubjects>No subjects</ng-template>
+    </p>
+    <p><strong>Hourly Rate:</strong> {{ teacher.hourlyRate | currency }}</p>
+    <p><strong>Rating:</strong> {{ teacher.rating }} / 5</p>
+    <p><strong>Online:</strong> {{ teacher.online ? 'Yes' : 'No' }}</p>
+    <p><strong>Offline:</strong> {{ teacher.offline ? 'Yes' : 'No' }}</p>
+    <p><strong>Age:</strong> {{ teacher.age }}</p>
+    <p><strong>Verification Status:</strong> {{ verificationEnum[teacher.verificationStatus!] || 'Unknown' }}</p>
+    <p><strong>Description:</strong> {{ teacher.description || 'N/A' }}</p>
+  </div>
 
-<ng-template #loading>
-  <p>Loading teacher details...</p>
-</ng-template>
-<button routerLink="/" class="btn btn-secondary">Back to list</button>
-
-
-<div *ngIf="authService.isLoggedIn()" [appHideIfClaimsNotMet]="claimReq.studentOnly">
-    <h2>Request a Connection</h2>
-
-    <form (ngSubmit)="submitRequest()">
-    <div *ngFor="let schedule of schedules; let i = index" class="mb-3 border p-3 rounded bg-light">
-        <label>Day of Week:</label>
-        <select [(ngModel)]="schedule.dayOfWeek" name="dayOfWeek{{i}}" class="form-control" required>
-            <option *ngFor="let d of dayKeys" [ngValue]="d">{{ DayOfWeek[d] }}</option>
-        </select>
-
-        <label>Start Time:</label>
-        <input type="string" [(ngModel)]="schedule.startTime" name="startTime{{i}}" class="form-control" required>
-
-        <label>End Time:</label>
-        <input type="string" [(ngModel)]="schedule.endTime" name="endTime{{i}}" class="form-control" required>
-
-        <button type="button" class="btn btn-danger mt-2" (click)="removeSchedule(i)">Remove</button>
-    </div>
-
-    <button type="button" class="btn btn-secondary mt-2" (click)="addSchedule()">Add Another Schedule</button>
-
-    <button type="submit" class="btn btn-primary mt-3">Send Request</button>
-    </form>
-
+  <ng-template #loading>
+    <p>Loading teacher details...</p>
+  </ng-template>
+  <div class="buttons">
+    <button 
+      *ngIf="!showConnectionSection" 
+      class="subscribe-btn" 
+      (click)="startConnectionRequest()">
+        Start Connection Request
+    </button>
+    <button *ngIf="showConnectionSection" type="button" class="btn btn-secondary mt-3" (click)="cancelConnectionRequest()">Cancel</button>
+    <button routerLink="/" class="button-back-list">Back to list</button>
+  </div>
+  
+  <div *ngIf="authService.isLoggedIn() && showConnectionSection" [appHideIfClaimsNotMet]="claimReq.studentOnly">
     <div>
-    <h3>Teacher Availability</h3>
+      <h3>Teacher Availability</h3>
 
-    <div *ngIf="availabilities.length > 0; else noAvailability">
-        <ul>
-        <li *ngFor="let a of availabilities">
-            <strong>{{ getDayName(a.dayOfWeek) }}</strong>:
-            {{ a.startTime }} - {{ a.endTime }}
-        </li>
-        </ul>
-    </div>
+      <table class="availability-table">
+        <thead>
+          <tr>
+            <th *ngFor="let day of dayOfWeekEnum">{{ day }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td *ngFor="let day of dayOfWeekEnum">
+              <div *ngFor="let slot of groupedAvailabilities[day]" class="slot-box">
+                <div>
+                  {{ slot.startTime }} - {{ slot.endTime }}
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-    <ng-template #noAvailability>
+      <ng-template #noAvailability>
         <p>No availabilities found for this teacher.</p>
-    </ng-template>
+      </ng-template>
     </div>
+    <div>
+      <h2>Request</h2>
+
+      <form (ngSubmit)="submitRequest()">
+        <div *ngFor="let schedule of schedules; let i = index" class="request-form">
+          <div>
+            <label>Day of Week:</label>
+            <select [(ngModel)]="schedule.dayOfWeek" name="dayOfWeek{{i}}" class="form-control" required>
+              <option *ngFor="let d of dayKeys" [ngValue]="d">{{ DayOfWeek[d] }}</option>
+            </select>
+          </div>
+          <div>
+            <label>Start Time:</label>
+            <input type="time" [(ngModel)]="schedule.startTime" name="startTime{{i}}" class="form-control" required>
+          </div>
+          <div>
+            <label>End Time:</label>
+            <input type="time" [(ngModel)]="schedule.endTime" name="endTime{{i}}" class="form-control" required>
+          </div>
+          <button type="button" class="remove-btn" (click)="removeSchedule(i)">Remove</button>
+        </div>
+
+        <div class="request-buttons">
+          <button type="button" class="btn btn-secondary mt-2" (click)="addSchedule()">Add Another Schedule</button>
+          <button type="submit" class="btn btn-primary mt-3">Send Request</button>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+    
 </div>

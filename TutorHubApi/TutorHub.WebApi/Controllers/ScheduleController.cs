@@ -27,14 +27,14 @@ public class ScheduleController(IScheduleService scheduleService) : ControllerBa
     }
 
     [HttpPost]
-    public async Task<ActionResult<ScheduleModel>> CreateSchedule(int teacherId, int studentId, ScheduleSimpleModel scheduleSimpleModel)
+    public async Task<ActionResult<ScheduleModel>> CreateSchedule(ScheduleCreateModel scheduleCreateModel)
     {
         if (!ModelState.IsValid)
         {
             return BadRequest("Schedule creation failed due to invalid model.");
         }
 
-        var schedule = await scheduleService.CreateAsync(teacherId, studentId, scheduleSimpleModel);
+        var schedule = await scheduleService.CreateAsync(scheduleCreateModel);
 
         return Ok(schedule);
     }

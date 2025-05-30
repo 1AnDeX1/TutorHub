@@ -3,8 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { MainPageComponent } from './main-page/main-page.component';
 import { TeacherProfileComponent } from './user-profile/teacher-profile/teacher-profile.component';
 import { TeacherAvailabilitiesComponent } from './user-profile/teacher-profile/teacher-availabilities/teacher-availabilities.component';
-import { TeacherAvailabilityAddComponent } from './user-profile/teacher-profile/teacher-availabilities/teacher-availability-add/teacher-availability-add.component';
-import { TeacherAvailabilityUpdateComponent } from './user-profile/teacher-profile/teacher-availabilities/teacher-availability-update/teacher-availability-update.component';
 import { UserComponent } from './user/user.component';
 import { TeacherRegistrationComponent } from './user/registration/teacher-registration/teacher-registration.component';
 import { StudentRegistrationComponent } from './user/registration/student-registration/student-registration.component';
@@ -20,6 +18,13 @@ import { TeacherStudentComponent } from './user-profile/teacher-profile/teacher-
 import { StudentTeacherComponent } from './user-profile/student-profile/student-teacher/student-teacher.component';
 import { StudentProfileDetailsComponent } from './user-profile/student-profile/student-profile-details/student-profile-details.component';
 import { TeacherProfileDetailsComponent } from './user-profile/teacher-profile/teacher-profile-details/teacher-profile-details.component';
+import { TeacherChatsComponent } from './user-profile/teacher-profile/teacher-chats/teacher-chats.component';
+import { TeacherChatComponent } from './user-profile/teacher-profile/teacher-chats/teacher-chat/teacher-chat.component';
+import { StudentChatsComponent } from './user-profile/student-profile/student-chats/student-chats.component';
+import { StudentChatComponent } from './user-profile/student-profile/student-chats/student-chat/student-chat.component';
+import { AdminComponent } from './admin/admin.component';
+import { TeacherListComponent } from './admin/teacher-list/teacher-list.component';
+import { StudentListComponent } from './admin/student-list/student-list.component';
 
 const routes: Routes = [
   { path: 'main', component: MainPageComponent },
@@ -34,6 +39,8 @@ const routes: Routes = [
       { path: 'profile', component: StudentProfileDetailsComponent,},
       { path: 'schedule', component: StudentScheduleComponent,},
       { path: 'teachers', component: StudentTeacherComponent,},
+      { path: 'chats', component: StudentChatsComponent },
+      { path: 'chat/:id', component: StudentChatComponent },
       { path: '', redirectTo: 'create', pathMatch: 'full' }
       ]
   },
@@ -45,25 +52,21 @@ const routes: Routes = [
     data: {claimReq: claimReq.teacherOnly},
     children: [
       {path: 'profile', component: TeacherProfileDetailsComponent },
-      { 
-        path: 'availabilities',
-        component: TeacherAvailabilitiesComponent,
-        children: [
-          { path: 'add', component: TeacherAvailabilityAddComponent },
-          { path: 'update/:id', component: TeacherAvailabilityUpdateComponent }
-        ]
-      },
-      { 
-        path: 'schedule',
-        component: TeacherScheduleComponent,
-        children: [
-          { path: 'add', component: TeacherAvailabilityAddComponent },
-          { path: 'update/:id', component: TeacherAvailabilityUpdateComponent }
-        ]
-      },
-      { path: 'students', component: TeacherStudentComponent,},
+      { path: 'availabilities', component: TeacherAvailabilitiesComponent },
+      { path: 'schedule', component: TeacherScheduleComponent},
+      { path: 'students', component: TeacherStudentComponent},
+      { path: 'chats', component: TeacherChatsComponent },  
+      { path: 'chat/:id', component: TeacherChatComponent },
       { path: '', redirectTo: 'create', pathMatch: 'full' }
       ]
+  },
+  {
+    path: 'admin',
+    component: AdminComponent,
+    children: [
+      { path: 'teacher-list', component: TeacherListComponent },
+      { path: 'student-list', component: StudentListComponent },
+    ],
   },
   { path: 'user', component: UserComponent,
     children:[

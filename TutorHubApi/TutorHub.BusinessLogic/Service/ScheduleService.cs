@@ -35,28 +35,30 @@ public class ScheduleService(
         return mapper.Map<IEnumerable<ScheduleModel>>(schedules);
     }
 
-    public async Task<IEnumerable<ScheduleModel>> GetByTeacherIdAsync(int teacherId)
+    public async Task<IEnumerable<TeacherScheduleModel>> GetByTeacherIdAsync(int teacherId)
     {
         var schedules = await unitOfWork.Schedules.GetByTeacherIdAsync(teacherId)
             ?? throw new NotFoundException($"Schedule with teacherId {teacherId} not found");
 
-        return mapper.Map<IEnumerable<ScheduleModel>>(schedules);
+        var mappedSchedules = mapper.Map<IEnumerable<TeacherScheduleModel>>(schedules);
+
+        return mappedSchedules;
     }
 
-    public async Task<IEnumerable<ScheduleModel>> GetByStudentIdAsync(int studentId)
+    public async Task<IEnumerable<StudentScheduleModel>> GetByStudentIdAsync(int studentId)
     {
         var schedules = await unitOfWork.Schedules.GetByStudentIdAsync(studentId)
             ?? throw new NotFoundException($"Schedule with studentId {studentId} not found");
 
-        return mapper.Map<IEnumerable<ScheduleModel>>(schedules);
+        return mapper.Map<IEnumerable<StudentScheduleModel>>(schedules);
     }
 
-    public async Task<ScheduleModel> CreateAsync(int teacherId, int studentId, ScheduleSimpleModel scheduleSimpleModel)
+    public async Task<ScheduleModel> CreateAsync(ScheduleCreateModel scheduleCreateModel)
     {
-        var studentTeacher = await unitOfWork.StudentTeachers.GetByTeacherAndStudentAsync(teacherId, studentId)
+        var studentTeacher = await unitOfWork.StudentTeachers.GetByTeacherAndStudentAsync(scheduleCreateModel.TeacherId, scheduleCreateModel.StudentId)
             ?? throw new ValidationException("There is no such student");
 
-        var schedule = mapper.Map<Schedule>(scheduleSimpleModel);
+        var schedule = mapper.Map<Schedule>(scheduleCreateModel);
         schedule.StudentTeacherId = studentTeacher.Id;
 
         await validator.ValidateScheduleCreateUpdate(schedule);

@@ -83,6 +83,14 @@ public class StudentService(
         var student = await unitOfWork.Students.GetByIdAsync(id)
             ?? throw new NotFoundException($"Student with ID {id} not found.");
 
+        var studentTeacherIds = await unitOfWork.StudentTeachers.GetStudentTeacherIdsByStudentId(id);
+
+        foreach (var studentTeacherId in studentTeacherIds)
+        {
+            await unitOfWork.StudentTeachers.DeleteWithSchedulesAsync(studentTeacherId);
+        }
+
+        await unitOfWork.Chats.DeleteByStudentIdAsync(id);
         await userService.DeleteUserAsync(student.UserId);
         await unitOfWork.TeacherRatings.DeleteByStudentIdAsync(id);
         await unitOfWork.Students.DeleteAsync(id);

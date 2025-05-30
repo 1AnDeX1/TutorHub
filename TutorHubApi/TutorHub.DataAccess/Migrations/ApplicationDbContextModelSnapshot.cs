@@ -155,6 +155,81 @@ namespace TutorHub.DataAccess.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("TutorHub.DataAccess.Entities.Chat", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.ToTable("Chats");
+                });
+
+            modelBuilder.Entity("TutorHub.DataAccess.Entities.ChatMessage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ChatId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Message")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SenderName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SenderRole")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TeacherId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatId");
+
+                    b.HasIndex("StudentId");
+
+                    b.HasIndex("TeacherId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ChatMessages");
+                });
+
             modelBuilder.Entity("TutorHub.DataAccess.Entities.Lesson", b =>
                 {
                     b.Property<int>("Id")
@@ -165,9 +240,6 @@ namespace TutorHub.DataAccess.Migrations
 
                     b.Property<DateOnly>("Date")
                         .HasColumnType("date");
-
-                    b.Property<int>("LessonId")
-                        .HasColumnType("int");
 
                     b.Property<string>("Notes")
                         .HasColumnType("nvarchar(max)");
@@ -193,10 +265,10 @@ namespace TutorHub.DataAccess.Migrations
                     b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
 
-                    b.Property<TimeOnly>("EndTime")
+                    b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
 
-                    b.Property<TimeOnly>("StartTime")
+                    b.Property<TimeSpan>("StartTime")
                         .HasColumnType("time");
 
                     b.Property<int>("Status")
@@ -331,10 +403,10 @@ namespace TutorHub.DataAccess.Migrations
                     b.Property<int>("DayOfWeek")
                         .HasColumnType("int");
 
-                    b.Property<TimeOnly>("EndTime")
+                    b.Property<TimeSpan>("EndTime")
                         .HasColumnType("time");
 
-                    b.Property<TimeOnly>("StartTime")
+                    b.Property<TimeSpan>("StartTime")
                         .HasColumnType("time");
 
                     b.Property<int>("TeacherId")
@@ -494,6 +566,52 @@ namespace TutorHub.DataAccess.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("TutorHub.DataAccess.Entities.Chat", b =>
+                {
+                    b.HasOne("TutorHub.DataAccess.Entities.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TutorHub.DataAccess.Entities.Teacher", "Teacher")
+                        .WithMany()
+                        .HasForeignKey("TeacherId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Student");
+
+                    b.Navigation("Teacher");
+                });
+
+            modelBuilder.Entity("TutorHub.DataAccess.Entities.ChatMessage", b =>
+                {
+                    b.HasOne("TutorHub.DataAccess.Entities.Chat", "Chat")
+                        .WithMany("Messages")
+                        .HasForeignKey("ChatId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("TutorHub.DataAccess.Entities.Student", null)
+                        .WithMany("ChatMessages")
+                        .HasForeignKey("StudentId");
+
+                    b.HasOne("TutorHub.DataAccess.Entities.Teacher", null)
+                        .WithMany("ChatMessages")
+                        .HasForeignKey("TeacherId");
+
+                    b.HasOne("TutorHub.DataAccess.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Chat");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("TutorHub.DataAccess.Entities.Lesson", b =>
                 {
                     b.HasOne("TutorHub.DataAccess.Entities.Schedule", "Schedule")
@@ -599,6 +717,11 @@ namespace TutorHub.DataAccess.Migrations
                     b.Navigation("Teacher");
                 });
 
+            modelBuilder.Entity("TutorHub.DataAccess.Entities.Chat", b =>
+                {
+                    b.Navigation("Messages");
+                });
+
             modelBuilder.Entity("TutorHub.DataAccess.Entities.Schedule", b =>
                 {
                     b.Navigation("LessonHistories");
@@ -606,6 +729,8 @@ namespace TutorHub.DataAccess.Migrations
 
             modelBuilder.Entity("TutorHub.DataAccess.Entities.Student", b =>
                 {
+                    b.Navigation("ChatMessages");
+
                     b.Navigation("Lessons");
 
                     b.Navigation("Teachers");
@@ -618,6 +743,8 @@ namespace TutorHub.DataAccess.Migrations
 
             modelBuilder.Entity("TutorHub.DataAccess.Entities.Teacher", b =>
                 {
+                    b.Navigation("ChatMessages");
+
                     b.Navigation("Lessons");
 
                     b.Navigation("Ratings");

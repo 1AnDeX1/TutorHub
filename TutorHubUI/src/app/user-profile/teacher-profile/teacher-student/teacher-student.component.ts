@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
   selector: 'app-teacher-student',
   standalone: false,
   templateUrl: './teacher-student.component.html',
-  styles: ``
+  styleUrl: '../../user-connection.css'
 })
 export class TeacherStudentComponent {
   students: StudentModel[] = [];

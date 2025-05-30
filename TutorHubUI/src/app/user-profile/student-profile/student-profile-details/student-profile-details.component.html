@@ -1,127 +1,69 @@
-<div *ngIf="isLoading">
+<div *ngIf="!isLoading; else loading">
+  <h2 class="title">Student Profile</h2>
+
+  <div *ngIf="!isEditing; else editMode">
+    <div class="profile-details">
+      <div class="profile-details-part">
+        <img src="https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI=" alt="avatar">
+        <p class="title"><strong>Description:</strong></p>
+        <p>{{ student.description || 'N/A' }}</p>
+      </div>
+      <div>
+        <div class="profile-details-info profile-details-part">
+          <p><strong>Username:</strong> {{ student.userName }}</p>
+          <p><strong>Email:</strong> {{ student.email }}</p>
+        </div>
+        <div class="profile-details-info profile-details-part">
+          <p><strong>Age:</strong> {{ student.age }}</p>
+          <p><strong>Grade:</strong> {{ student.grade || 'N/A' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-details-btn">
+      <button class="btn btn-primary" (click)="enableEdit()">Edit</button>
+      <button class="btn btn-danger" (click)="deleteStudent()">Delete</button>
+    </div>
+  </div>
+
+  <ng-template #editMode>
+    <form (ngSubmit)="updateStudent()" #studentForm="ngForm" novalidate>
+      <div class="form-group">
+        <label>User Name</label>
+        <input [(ngModel)]="student.userName" name="userName" class="form-control" required minlength="3" />
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input [(ngModel)]="student.email" name="email" type="email" class="form-control" required />
+      </div>
+
+      <div class="form-group">
+        <label>Password</label>
+        <input [(ngModel)]="student.password" name="password" type="password" class="form-control" required minlength="6" />
+      </div>
+
+      <div class="form-group">
+        <label>Age</label>
+        <input [(ngModel)]="student.age" name="age" type="number" class="form-control" required min="1" />
+      </div>
+
+      <div class="form-group">
+        <label>Grade (optional)</label>
+        <input [(ngModel)]="student.grade" name="grade" type="number" class="form-control" min="1" max="12" />
+      </div>
+
+      <div class="form-group">
+        <label>Description (optional)</label>
+        <textarea [(ngModel)]="student.description" name="description" class="form-control" rows="3"></textarea>
+      </div>
+
+      <button type="submit" class="btn btn-success" [disabled]="studentForm.invalid">Save</button>
+      <button type="button" class="btn btn-secondary ms-2" (click)="cancelEdit()">Cancel</button>
+    </form>
+  </ng-template>
+</div>
+
+<ng-template #loading>
   <p>Loading student details...</p>
-</div>
-
-<!-- VIEW MODE -->
-<div *ngIf="!isLoading && !isEditing">
-  <h3>Student Profile</h3>
-  <p><strong>User Name:</strong> {{ student.userName }}</p>
-  <p><strong>Email:</strong> {{ student.email }}</p>
-  <p><strong>Age:</strong> {{ student.age }}</p>
-  <p><strong>Grade:</strong> {{ student.grade || 'N/A' }}</p>
-  <p><strong>Description:</strong> {{ student.description || 'N/A' }}</p>
-
-  <button class="btn btn-primary" (click)="enableEdit()">Edit</button>
-  <button class="btn btn-danger ms-2" (click)="deleteStudent()">Delete</button>
-</div>
-
-<!-- EDIT MODE -->
-<form *ngIf="!isLoading && isEditing" (ngSubmit)="updateStudent()" #studentForm="ngForm" novalidate>
-  <h3>Edit Student Profile</h3>
-
-  <div class="mb-3">
-    <label for="userName" class="form-label">User Name</label>
-    <input
-      id="userName"
-      name="userName"
-      type="text"
-      class="form-control"
-      required
-      minlength="3"
-      [(ngModel)]="student.userName"
-      #userName="ngModel"
-    />
-    <div *ngIf="userName.invalid && userName.touched" class="text-danger">
-      User Name is required and must be at least 3 characters.
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <label for="email" class="form-label">Email</label>
-    <input
-      id="email"
-      name="email"
-      type="email"
-      class="form-control"
-      required
-      [(ngModel)]="student.email"
-      #email="ngModel"
-    />
-    <div *ngIf="email.invalid && email.touched" class="text-danger">
-      Please enter a valid email.
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <label for="password" class="form-label">Password</label>
-    <input
-        id="password"
-        name="password"
-        type="password"
-        class="form-control"
-        required
-        minlength="6"
-        [(ngModel)]="student.password"
-        #password="ngModel"
-    />
-    <div *ngIf="password.invalid && password.touched" class="text-danger">
-        Password is required and must be at least 6 characters.
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <label for="age" class="form-label">Age</label>
-    <input
-      id="age"
-      name="age"
-      type="number"
-      class="form-control"
-      required
-      min="1"
-      [(ngModel)]="student.age"
-      #age="ngModel"
-    />
-    <div *ngIf="age.invalid && age.touched" class="text-danger">
-      Please enter a valid age.
-    </div>
-  </div>
-
-  <div class="mb-3">
-    <label for="grade" class="form-label">Grade (optional)</label>
-    <input
-      id="grade"
-      name="grade"
-      type="number"
-      class="form-control"
-      min="1"
-      max="12"
-      [(ngModel)]="student.grade"
-    />
-  </div>
-
-  <div class="mb-3">
-    <label for="description" class="form-label">Description (optional)</label>
-    <textarea
-      id="description"
-      name="description"
-      class="form-control"
-      rows="3"
-      [(ngModel)]="student.description"
-    ></textarea>
-  </div>
-
-  <button
-    type="submit"
-    class="btn btn-success"
-    [disabled]="studentForm.invalid"
-  >
-    Save Changes
-  </button>
-  <button
-    type="button"
-    class="btn btn-secondary ms-2"
-    (click)="cancelEdit()"
-  >
-    Cancel
-  </button>
-</form>
+</ng-template>

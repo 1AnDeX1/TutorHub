@@ -1,24 +1,23 @@
 ﻿using TutorHub.DataAccess.Entities;
 
-namespace TutorHub.DataAccess.IRepositories
+namespace TutorHub.DataAccess.IRepositories;
+
+public interface ITeacherAvailabilityRepository
 {
-    public interface ITeacherAvailabilityRepository
-    {
-        Task<IEnumerable<TeacherAvailability>> GetByTeacherIdAsync(int teacherId);
+    Task<IEnumerable<TeacherAvailability>> GetByTeacherIdAsync(int teacherId);
 
-        Task<TeacherAvailability?> GetAvailabilityByIdAsync(int availabilityId);
+    Task<TeacherAvailability?> GetAvailabilityByIdAsync(int availabilityId);
 
-        Task<IEnumerable<TeacherAvailability>> GetAvailabilitiesAsync(
-            int teacherId, DayOfWeek day, TimeOnly startTime, TimeOnly endTime);
+    Task<IEnumerable<TeacherAvailability>> GetAvailabilitiesAsync(
+        int teacherId, DayOfWeek day, TimeOnly startTime, TimeOnly endTime);
 
-        Task AddAsync(TeacherAvailability availability);
+    Task AddAsync(TeacherAvailability availability);
 
-        void Update(TeacherAvailability availability);
+    void Update(TeacherAvailability availability);
 
-        Task DeleteAsync(int availabilityId);
+    Task DeleteAsync(int availabilityId);
 
-        Task<bool> IsSlotAvailableAsync(int teacherId, DayOfWeek day, TimeOnly startTime, TimeOnly endTime);
+    Task<bool> IsSlotAvailableAsync(int teacherId, DayOfWeek day, TimeOnly startTime, TimeOnly endTime);
 
-        Task<bool> IsSlotAvailableForUpdateAsync(int teacherId, DayOfWeek day, TimeOnly startTime, TimeOnly endTime, int excludeAvailabilityId);
-    }
+    Task<bool> IsSlotAvailableForUpdateAsync(int teacherId, DayOfWeek day, TimeOnly startTime, TimeOnly endTime, int excludeAvailabilityId);
 }

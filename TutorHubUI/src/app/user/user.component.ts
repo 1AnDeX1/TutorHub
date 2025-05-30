@@ -1,25 +1,23 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../shared/user/auth.service';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
   standalone: false,
   templateUrl: './user.component.html',
-  styles: ``
+  styleUrl: './user.component.css'
 })
 export class UserComponent {
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
+  hideButtons: boolean = false;
 
-  isLoggedIn(): boolean {
-    return this.authService.isLoggedIn();
-  }
+  constructor(private router: Router) {}
 
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/login']);
+  ngOnInit(): void {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        const hiddenRoutes = ['login', 'teacher-registration', 'student-registration'];
+        this.hideButtons = hiddenRoutes.some(route => this.router.url.includes(route));
+      }
+    });
   }
 }

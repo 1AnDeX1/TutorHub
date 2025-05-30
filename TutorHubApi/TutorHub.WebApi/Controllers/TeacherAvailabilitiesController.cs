@@ -2,50 +2,49 @@
 using TutorHub.BusinessLogic.IServices;
 using TutorHub.BusinessLogic.Models.Schedules;
 
-namespace TutorHub.WebApi.Controllers
+namespace TutorHub.WebApi.Controllers;
+
+[Route("api/[controller]")]
+[ApiController]
+public class TeacherAvailabilitiesController(ITeacherAvailabilityService availabilityService) : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class TeacherAvailabilitiesController(ITeacherAvailabilityService availabilityService) : ControllerBase
+
+    [HttpGet("{teacherId}")]
+    public async Task<ActionResult<IEnumerable<TeacherAvailabilityModel>?>> GetAvailabilities(int teacherId)
     {
+        var availability = await availabilityService.GetByTeacherIdAsync(teacherId);
+        return Ok(availability);
+    }
 
-        [HttpGet("{teacherId}")]
-        public async Task<ActionResult<IEnumerable<TeacherAvailabilityModel>?>> GetAvailabilities(int teacherId)
+    [HttpPost("{teacherId}/add")]
+    public async Task<IActionResult> AddAvailability(int teacherId, [FromBody] TeacherAvailabilityRequest request)
+    {
+        if (!ModelState.IsValid)
         {
-            var availability = await availabilityService.GetByTeacherIdAsync(teacherId);
-            return Ok(availability);
+            return BadRequest("Availability adding failed due to invalid model.");
         }
 
-        [HttpPost("{teacherId}/add")]
-        public async Task<IActionResult> AddAvailability(int teacherId, [FromBody] TeacherAvailabilityRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Availability adding failed due to invalid model.");
-            }
+        await availabilityService.AddAsync(teacherId, request);
+        return Ok();
+    }
 
-            await availabilityService.AddAsync(teacherId, request);
-            return Ok();
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateAvailability(int id, [FromBody] UpdateAvailabilityRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            return BadRequest("Availability updating failed due to invalid model.");
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAvailability(int id, [FromBody] UpdateAvailabilityRequest request)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Availability updating failed due to invalid model.");
-            }
+        await availabilityService.UpdateAsync(id, request);
 
-            await availabilityService.UpdateAsync(id, request);
+        return Ok();
+    }
 
-            return Ok();
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> RemoveAvailability(int id)
-        {
-            await availabilityService.RemoveAsync(id);
-            return Ok();
-        }
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> RemoveAvailability(int id)
+    {
+        await availabilityService.RemoveAsync(id);
+        return Ok();
     }
 }

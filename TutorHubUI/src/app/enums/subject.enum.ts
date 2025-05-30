@@ -1,6 +1,12 @@
 export enum Subject {
-  Math,
+  Maths,
   Science,
   Literature,
-  History
+  History,
+  Art,
+  Geography,
+  Music,
+  English,
+  Biology,
+  IT
 }

@@ -19,21 +19,24 @@ import { claimReq } from '../../shared/utils/claimReq-utils';
   selector: 'app-teacher-details',
   standalone: false,
   templateUrl: './teacher-details.component.html',
-  styles: ``
+  styleUrl: './teacher-details.component.css'
 })
 export class TeacherDetailsComponent {
-  claimReq = claimReq
+  claimReq = claimReq; // Claim requirements for RBAC
   teacherId!: number;
   teacher!: TeacherModel;
   subjectEnum = Subject;
   verificationEnum = VerificationStatus;
   schedules: ScheduleSimpleModel[] = [];
   availabilities: TeacherAvailabilityModel[] = [];
+  groupedAvailabilities: { [key: string]: TeacherAvailabilityModel[] } = {};
   DayOfWeek = DayOfWeek;
+  dayOfWeekEnum = Object.keys(DayOfWeek).filter(v => isNaN(Number(v)));
+  showConnectionSection = false; // New state variable to toggle the connection section
   dayKeys = Object.keys(DayOfWeek)
     .filter(k => !isNaN(+k))
     .map(k => +k);
-
+    
   constructor(
     private studentTeacherService: StudentTeacherService,
     public authService: AuthService,
@@ -84,15 +87,42 @@ export class TeacherDetailsComponent {
     });
   }
 
-   loadAvailabilities(id: number) {
+  loadAvailabilities(id: number) {
     this.availabilityService.getAvailabilitiesByTeacherId(id)
       .subscribe({
-        next: res => this.availabilities = res,
+        next: (res) => {
+        this.availabilities = res;
+        this.groupAvailabilitiesByDay();
+      },
         error: err => console.error('Error loading availability', err)
       });
   }
 
+  groupAvailabilitiesByDay(): void {
+    this.groupedAvailabilities = {};
+
+    for (const day of this.dayOfWeekEnum) {
+      this.groupedAvailabilities[day] = [];
+    }
+
+    for (const slot of this.availabilities) {
+      const dayName = slot.dayOfWeek;
+      if (!this.groupedAvailabilities[dayName]) {
+        this.groupedAvailabilities[dayName] = [];
+      }
+      this.groupedAvailabilities[dayName].push(slot);
+    }
+  }
+
   getDayName(day: number): string {
     return DayOfWeek[day];
+  }
+
+  startConnectionRequest() {
+    this.showConnectionSection = true;
+  }
+
+  cancelConnectionRequest() {
+    this.showConnectionSection = false;
   }
 }

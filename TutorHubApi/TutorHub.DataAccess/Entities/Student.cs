@@ -1,21 +1,22 @@
-﻿namespace TutorHub.DataAccess.Entities
+﻿namespace TutorHub.DataAccess.Entities;
+
+public class Student
 {
-    public class Student
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public string UserId { get; set; } = string.Empty;
+    public string UserId { get; set; } = string.Empty;
 
-        public int Age { get; set; }
+    public int Age { get; set; }
 
-        public int? Grade {  get; set; }
+    public int? Grade {  get; set; }
 
-        public string? Description { get; set; }
+    public string? Description { get; set; }
 
-        public User? User { get; set; }
+    public User? User { get; set; }
 
-        public ICollection<StudentTeacher>? Teachers { get; set; }
+    public ICollection<StudentTeacher>? Teachers { get; set; }
 
-        public ICollection<Schedule>? Lessons { get; set; }
-    }
+    public ICollection<Schedule>? Lessons { get; set; }
+
+    public ICollection<ChatMessage>? ChatMessages { get; set; }
 }

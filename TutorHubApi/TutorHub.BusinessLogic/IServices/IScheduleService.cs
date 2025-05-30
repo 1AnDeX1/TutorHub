@@ -1,23 +1,22 @@
 ﻿using TutorHub.BusinessLogic.Models.Schedules;
 
-namespace TutorHub.BusinessLogic.IServices
+namespace TutorHub.BusinessLogic.IServices;
+
+public interface IScheduleService
 {
-    public interface IScheduleService
-    {
-        Task<IEnumerable<ScheduleModel>> GetAllAsync();
+    Task<IEnumerable<ScheduleModel>> GetAllAsync();
 
-        Task<ScheduleModel> GetByIdAsync(int id);
+    Task<ScheduleModel> GetByIdAsync(int id);
 
-        Task<IEnumerable<ScheduleModel>> GetByStudentTeacherIdAsync(int id);
+    Task<IEnumerable<ScheduleModel>> GetByStudentTeacherIdAsync(int id);
 
-        Task<IEnumerable<ScheduleModel>> GetByTeacherIdAsync(int teacherId);
+    Task<IEnumerable<TeacherScheduleModel>> GetByTeacherIdAsync(int teacherId);
 
-        Task<IEnumerable<ScheduleModel>> GetByStudentIdAsync(int studentId);
+    Task<IEnumerable<StudentScheduleModel>> GetByStudentIdAsync(int studentId);
 
-        Task<ScheduleModel> CreateAsync(int teacherId, int studentId, ScheduleSimpleModel scheduleSimpleModel);
+    Task<ScheduleModel> CreateAsync(ScheduleCreateModel scheduleCreateModel);
 
-        Task<ScheduleModel> UpdateAsync(ScheduleModel scheduleModel);
+    Task<ScheduleModel> UpdateAsync(ScheduleModel scheduleModel);
 
-        Task DeleteAsync(int id);
-    }
+    Task DeleteAsync(int id);
 }

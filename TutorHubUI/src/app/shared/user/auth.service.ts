@@ -22,14 +22,21 @@ export class AuthService {
 
         const claims = this.getClaims();
 
+        const userId = claims?.nameid;
         const teacherId = claims?.TeacherId;
         const studentId = claims?.StudentId;
-
+        const userName = claims?.unique_name || null;
         if (teacherId) {
           localStorage.setItem('TeacherId', teacherId);
         }
         if (studentId) {
           localStorage.setItem('StudentId', studentId);
+        }
+        if (userName) {
+          localStorage.setItem('UserName', userName);
+        }
+        if (userId) {
+          localStorage.setItem('UserId', userId);
         }
       })
     );
@@ -47,6 +54,8 @@ export class AuthService {
     localStorage.removeItem(TOKEN_KEY);
     localStorage.removeItem('TeacherId');
     localStorage.removeItem('StudentId');
+    localStorage.removeItem('UserName');
+    localStorage.removeItem('UserId');
   }
 
   isLoggedIn(): boolean {
@@ -77,5 +86,23 @@ export class AuthService {
     }
     const parsed = Number(id);
     return isNaN(parsed) ? null : parsed;
+  }
+
+  getUserId(): string | null {
+    const id = localStorage.getItem('UserId');
+    if (!id) {
+      return null;
+    }
+
+    return id;
+  }
+
+  getUserName(): string | null {
+    const userName = localStorage.getItem('UserName');
+    if (!userName) {
+      return null;
+    }
+
+    return userName;
   }
 }

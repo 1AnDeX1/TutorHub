@@ -1,5 +1,4 @@
-﻿
-using TutorHub.BusinessLogic.Models.StudentTeacher;
+﻿using TutorHub.BusinessLogic.Models.StudentTeacher;
 using TutorHub.BusinessLogic.Models.User;
 using TutorHub.BusinessLogic.Models.User.Student;
 using TutorHub.BusinessLogic.Models.User.Teacher;

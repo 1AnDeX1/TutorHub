@@ -8,7 +8,7 @@ import { NgForm } from '@angular/forms';
   selector: 'app-student-registration',
   standalone: false,
   templateUrl: './student-registration.component.html',
-  styles: ``
+  styleUrl: './../../user.component.css'
 })
 export class StudentRegistrationComponent {
   
@@ -29,7 +29,6 @@ export class StudentRegistrationComponent {
           this.router.navigate(['/main']);
         },
         error: err => {
-          this.toastr.error(err.error || 'Server error', 'Creation Failed');
         }
       });
     } else {

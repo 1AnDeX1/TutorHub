@@ -1,24 +1,62 @@
-<div>
-  <a routerLink="add" routerLinkActive="active">Add Availability</a>
-  <h2>Teacher Availability</h2>
-  <router-outlet></router-outlet>
-  
-  <div *ngIf="availabilityService.list.length > 0; else noData">
-    <ul>
-      <li *ngFor="let a of availabilityService.list">
-        <strong>{{ getDayName(a.dayOfWeek) }}</strong>:
-        {{ a.startTime }} - {{ a.endTime }}
-        <span>
-            <i class="fa-solid fa-trash-can"
-            (click)="deleteAvailability(a.id)"></i>
-        </span>
-        <a [routerLink]="['update', a.id]"
-           (click)="updateAvailability(a)">Edit</a>
-      </li>
-    </ul>
-  </div>
+<h2>Teacher Availabilities</h2>
 
-  <ng-template #noData>
-    <p>No availabilities found.</p>
-  </ng-template>
+<!-- Table of availabilities -->
+<div *ngIf="availabilities.length > 0; else noAvailabilities" class="availability-grid">
+  <table class="availability-table">
+    <thead>
+      <tr>
+        <th *ngFor="let day of dayOfWeekEnum">{{ day }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td *ngFor="let day of dayOfWeekEnum">
+          <div *ngFor="let slot of groupedAvailabilities[day]" class="slot-box" (click)="onSlotClick(slot)">
+            <div>
+              {{ slot.startTime }} - {{ slot.endTime }}
+            </div>
+            <div class="slot-actions" *ngIf="clickedSlotId === slot.id">
+              <button (click)="onEdit(slot); $event.stopPropagation()">Edit</button>
+              <button (click)="onDelete(slot.id); $event.stopPropagation()">Delete</button>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<ng-template #noAvailabilities>
+  <p>No availabilities found.</p>
+</ng-template>
+
+<!-- Button to show/hide the form -->
+<div class="availability-form-container">
+  <button (click)="toggleForm()" class="show-form-button">
+    {{ showForm ? 'Hide Form' : 'Add Availability' }}
+  </button>
+
+  <!-- Form to add/edit availability -->
+  <form *ngIf="showForm" [formGroup]="availabilityForm" (ngSubmit)="onSubmit()" class="availability-form">
+    <div>
+      <label for="dayOfWeek">Day of Week:</label>
+      <select formControlName="dayOfWeek" id="dayOfWeek">
+        <option *ngFor="let day of dayOfWeekEnum; let i = index" [value]="i">
+          {{ day }}
+        </option>
+      </select>
+    </div>
+    <div>
+      <label for="startTime">Start Time:</label>
+      <input type="time" formControlName="startTime" id="startTime" required />
+    </div>
+    <div>
+      <label for="endTime">End Time:</label>
+      <input type="time" formControlName="endTime" id="endTime" required />
+    </div>
+    <div>
+      <button type="submit">{{ selectedAvailability ? 'Update' : 'Add' }} Availability</button>
+      <button type="button" (click)="resetForm()" *ngIf="selectedAvailability">Cancel</button>
+    </div>
+  </form>
 </div>

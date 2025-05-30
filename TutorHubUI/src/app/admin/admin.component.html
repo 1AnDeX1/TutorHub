@@ -1,1 +1,14 @@
-<p>admin works!</p>
+<div class="profile">
+  <div class="profile-menu">
+    <a routerLink="teacher-list" routerLinkActive="active">Teachers</a><br>
+    <a routerLink="student-list" routerLinkActive="active">Students</a><br>
+    <button *ngIf="isLoggedIn()" (click)="logout()" class="btn btn-danger">
+      Logout
+    </button>
+  </div>
+
+  <!-- Right content area -->
+  <div class="profile-info">
+    <router-outlet></router-outlet>
+  </div>
+</div>

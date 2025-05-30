@@ -4,6 +4,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment.development';
 import { ScheduleModel } from '../schedule/scheduleModels/schedule-model.model';
+import { StudentScheduleModel } from '../schedule/scheduleModels/student-schedule-model.model';
+import { StudentModel } from './studentModels/student-model.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +17,16 @@ export class StudentService {
 
   constructor(private http: HttpClient) { }
 
+  getStudents(): Observable<{ students: StudentModel[], studentsCount: number }> {
+    return this.http.get<{ students: StudentModel[], studentsCount: number }>(this.url);
+  }
+
   getStudentById(id: number): Observable<StudentCreateModel> {
     return this.http.get<StudentCreateModel>(`${this.url}/${id}`);
   }
 
-  getScheduleByStudentId(studentId: number): Observable<ScheduleModel[]> {
-    return this.http.get<ScheduleModel[]>(`${this.url}/${studentId}/schedule`);
+  getScheduleByStudentId(studentId: number): Observable<StudentScheduleModel[]> {
+    return this.http.get<StudentScheduleModel[]>(`${this.url}/${studentId}/schedule`);
   }
 
   updateStudent(id: number, student: StudentCreateModel): Observable<any> {

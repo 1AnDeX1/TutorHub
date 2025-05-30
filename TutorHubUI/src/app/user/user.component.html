@@ -1,8 +1,11 @@
-<a routerLink="login" routerLinkActive="active">Login</a><br>
-<a routerLink="teacher-registration" routerLinkActive="active">Register as teacher</a><br>
-<a routerLink="student-registration" routerLinkActive="active">Register as student</a><br>
-<button *ngIf="isLoggedIn()" (click)="logout()" class="btn btn-danger">
-  Logout
-</button>
+<div class="full-auth">
+    <div class="auth">
+        <div *ngIf="!hideButtons" class="auth-links">
+            <a routerLink="login" routerLinkActive="active">Login</a>
+            <a routerLink="teacher-registration" routerLinkActive="active">Register as teacher</a>
+            <a routerLink="student-registration" routerLinkActive="active">Register as student</a>
+        </div>
 
-<router-outlet></router-outlet>
+        <router-outlet></router-outlet>
+    </div>
+</div>

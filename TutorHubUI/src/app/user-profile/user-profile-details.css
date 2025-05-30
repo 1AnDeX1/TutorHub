@@ -1,0 +1,117 @@
+.title{
+    text-align: center;
+}
+.profile-details{
+    display: flex;
+}
+
+.profile-details-part{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #e2e1e1;
+    border: 2px solid #ccc;
+    margin: 5px 20px;
+    border-radius: 20px;
+    padding: 10px 30px;
+    width: 100%;
+    max-width: 350px;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow-wrap: break-word; /* ensures long words wrap */
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+.profile-details-part img {
+  max-width: 150px;
+  border-radius: 50%;
+}
+
+.profile-details-info{
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.profile-details-btn{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.profile-details-btn button{
+    display: block;
+    background-color: #e2e1e1;
+    border: 2px solid #ccc;
+    text-align: center;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    font-weight: bold;
+    border-radius: 20px;
+}
+
+.profile-details-btn button:nth-child(1){
+    padding: 0 30px;
+}
+
+.profile-details-btn button:nth-child(1):hover{
+    background-color: darkgray;
+    color: beige;
+}
+
+.profile-details-btn button:nth-child(2):hover{
+    background-color: darkred;
+    color: wheat;
+}
+
+form {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: #f9f9f9;
+  padding: 25px 30px;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 8px 12px;
+  font-size: 16px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  resize: vertical;
+}
+
+.form-group textarea {
+  min-height: 150px;
+}
+
+form button {
+    margin-right: 10px;
+    display: block;
+    background-color: #e2e1e1;
+    border: 2px solid #ccc;
+    text-align: center;
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    font-weight: bold;
+    border-radius: 20px;
+}
+
+form button:hover{
+    background-color: darkgray;
+    color: beige;
+}

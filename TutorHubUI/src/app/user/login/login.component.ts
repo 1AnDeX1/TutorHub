@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   selector: 'app-login',
   standalone: false,
   templateUrl: './login.component.html',
-  styles: ``
+  styleUrl: './../user.component.css' 
 })
 export class LoginComponent implements OnInit {
 
@@ -43,7 +43,6 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('/teacher-profile')
       },
       error: err => {
-        this.toastr.error(err.error || 'Login failed', 'Error');
         this.loading = false;
       }
     });

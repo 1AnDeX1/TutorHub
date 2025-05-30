@@ -1,0 +1,63 @@
+.profile{
+    display: flex;
+    margin: 0 10%;
+}
+
+.profile-menu{
+    display: flex;
+    flex-direction: column;
+    justify-items: center;
+    height: 400px;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 20px;
+    border: 3px solid #2C3E50;
+    background-color: rgba(204, 204, 204, 0.3);
+}
+
+.profile-menu a{
+    display: block;
+    color: #2C3E50;
+    text-align: center;
+    margin-bottom: 10px;
+    padding: 10px;
+    font-weight: bold;
+}
+
+.profile-menu a:hover{
+    background-color: #ccc;
+    border-radius: 20px;
+}
+
+.profile-menu a.active {
+    background-color: #2C3E50;
+    color: wheat;
+    border-radius: 20px;
+}
+
+.profile-menu button{
+    display: block;
+    color: #2C3E50;
+    background-color: darkgray;
+    border: 2px solid #2C3E50;
+    text-align: center;
+    margin-bottom: 10px;
+    padding: 10px 5px;
+    font-weight: bold;
+    border-radius: 20px;
+}
+
+.profile-menu button:hover{
+    background-color: darkred;
+    color: wheat;
+}
+
+.profile-info{
+    display: block;
+    margin: 20px;
+    background-color: rgba(204, 204, 204, 0.3);
+    border: 3px solid #2C3E50;
+    border-radius: 20px;
+    padding: 0 50px;
+    width: 100%;
+}

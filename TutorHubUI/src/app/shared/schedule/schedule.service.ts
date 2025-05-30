@@ -3,6 +3,9 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { ScheduleModel } from './scheduleModels/schedule-model.model';
 import { Observable } from 'rxjs';
+import { ScheduleSimpleModel } from './scheduleModels/schedule-simple-model.model';
+import { ScheduleCreateModel } from './scheduleModels/schedule-create-model.model';
+import { TeacherScheduleModel } from './scheduleModels/teacher-schedule-model.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,19 +16,12 @@ export class ScheduleService {
   
    constructor(private http: HttpClient) {}
 
-  getScheduleByTeacherId(teacherId: number): Observable<ScheduleModel[]> {
-    return this.http.get<ScheduleModel[]>(`https://localhost:7094/api/teachers/${teacherId}/schedule`);
+  getScheduleByTeacherId(teacherId: number): Observable<TeacherScheduleModel[]> {
+    return this.http.get<TeacherScheduleModel[]>(`https://localhost:7094/api/teachers/${teacherId}/schedule`);
   }
-// CREATE
-  createSchedule(
-    teacherId: number,
-    studentId: number,
-    schedule: { dayOfWeek: number; startTime: string; endTime: string }
-  ): Observable<ScheduleModel> {
-    return this.http.post<ScheduleModel>(
-      `${this.baseUrl}?teacherId=${teacherId}&studentId=${studentId}`,
-      schedule
-    );
+  
+  createSchedule(scheduleCreateModel: ScheduleCreateModel): Observable<ScheduleCreateModel> {
+    return this.http.post<ScheduleCreateModel>(this.baseUrl, scheduleCreateModel);
   }
 
   // UPDATE

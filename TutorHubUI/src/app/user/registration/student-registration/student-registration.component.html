@@ -1,37 +1,88 @@
-<form #form="ngForm" (ngSubmit)="onSubmit(form)" [class.submitted]="studentService.formSubmitted" novalidate>
-
+<form
+  #form="ngForm"
+  (ngSubmit)="onSubmit(form)"
+  [class.submitted]="studentService.formSubmitted"
+  novalidate
+>
   <div>
     <label>User Name</label>
-    <input type="text" name="userName" required [(ngModel)]="studentService.formData.userName" #userName="ngModel">
-    <div *ngIf="userName.invalid && userName.touched">User name is required.</div>
+    <input
+      class="input-field"
+      type="text"
+      name="userName"
+      required
+      [(ngModel)]="studentService.formData.userName"
+      #userName="ngModel"
+    />
+    <div *ngIf="userName.invalid && userName.touched" class="error">
+      User name is required.
+    </div>
   </div>
 
   <div>
     <label>Email</label>
-    <input type="email" name="email" required [(ngModel)]="studentService.formData.email" #email="ngModel">
-    <div *ngIf="email.invalid && email.touched">Valid email is required.</div>
+    <input
+      class="input-field"
+      type="email"
+      name="email"
+      required
+      [(ngModel)]="studentService.formData.email"
+      #email="ngModel"
+    />
+    <div *ngIf="email.invalid && email.touched" class="error">
+      Valid email is required.
+    </div>
   </div>
 
   <div>
     <label>Password</label>
-    <input type="password" name="password" required minlength="6" [(ngModel)]="studentService.formData.password" #password="ngModel">
-    <div *ngIf="password.invalid && password.touched">Password (min 6 chars) required.</div>
+    <input
+      class="input-field"
+      type="password"
+      name="password"
+      required
+      minlength="6"
+      [(ngModel)]="studentService.formData.password"
+      #password="ngModel"
+    />
+    <div *ngIf="password.invalid && password.touched" class="error">
+      Password (min 6 chars) required.
+    </div>
   </div>
 
   <div>
     <label>Age</label>
-    <input type="number" name="age" required min="0" [(ngModel)]="studentService.formData.age" #age="ngModel">
-    <div *ngIf="age.invalid && age.touched">Valid age is required.</div>
+    <input
+      class="input-field"
+      type="number"
+      name="age"
+      required
+      min="0"
+      [(ngModel)]="studentService.formData.age"
+      #age="ngModel"
+    />
+    <div *ngIf="age.invalid && age.touched" class="error">
+      Valid age is required.
+    </div>
   </div>
 
   <div>
     <label>Grade (optional)</label>
-    <input type="number" name="grade" [(ngModel)]="studentService.formData.grade">
+    <input
+      class="input-field"
+      type="number"
+      name="grade"
+      [(ngModel)]="studentService.formData.grade"
+    />
   </div>
 
   <div>
     <label>Description (optional)</label>
-    <textarea name="description" [(ngModel)]="studentService.formData.description"></textarea>
+    <textarea
+      class="input-field"
+      name="description"
+      [(ngModel)]="studentService.formData.description"
+    ></textarea>
   </div>
 
   <div>

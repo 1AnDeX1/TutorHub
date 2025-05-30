@@ -1,22 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TutorHub.DataAccess.Entities;
+﻿using TutorHub.DataAccess.Entities;
 
-namespace TutorHub.DataAccess.IRepositories.UserInterfaces
+namespace TutorHub.DataAccess.IRepositories.IUserRepositories;
+
+public interface IUserRepository
 {
-    public interface IUserRepository
-    {
-        Task<(IEnumerable<User> users, int usersCount)> GetUsersAsync(int page, int pageSize);
+    Task<(IEnumerable<User> users, int usersCount)> GetUsersAsync(int page, int pageSize);
 
-        Task<(IEnumerable<User> users, int usersCount)> GetUsersByNameAsync(string username, int page, int pageSize);
+    Task<(IEnumerable<User> users, int usersCount)> GetUsersByNameAsync(string username, int page, int pageSize);
 
-        Task<User?> GetByIdAsync(string id);
+    Task<User?> GetByIdAsync(string id);
 
-        Task UpdateAsync(User user);
+    Task UpdateAsync(User user);
 
-        Task DeleteAsync(string id);
-    }
+    Task DeleteAsync(string id);
 }

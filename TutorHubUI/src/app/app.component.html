@@ -1,9 +1,13 @@
-<footer>
-    <a routerLink="/main" style="margin: 20px;">Main</a>
-    <a routerLink="/teacher-profile" *ngIf="authService.isLoggedIn()" [appHideIfClaimsNotMet]="claimReq.teacherOnly" style="margin: 20px;">TProfile</a>
-    <a routerLink="/student-profile" *ngIf="authService.isLoggedIn()" [appHideIfClaimsNotMet]="claimReq.studentOnly" style="margin: 20px;">SProfile</a>
-    <a routerLink="/user" style="margin: 20px;">User</a>
-</footer>
+<style>
+@import url('https://fonts.cdnfonts.com/css/copperplate-gothic-light');
+</style>
+<header>
+    <a routerLink="/main">Main</a>
+    <a routerLink="/teacher-profile" *ngIf="authService.isLoggedIn()" [appHideIfClaimsNotMet]="claimReq.teacherOnly">Profile</a>
+    <a routerLink="/student-profile" *ngIf="authService.isLoggedIn()" [appHideIfClaimsNotMet]="claimReq.studentOnly">Profile</a>
+    <a routerLink="/admin" *ngIf="authService.isLoggedIn()" [appHideIfClaimsNotMet]="claimReq.adminOnly" >Admin</a>
+    <a routerLink="/user" *ngIf="!authService.isLoggedIn()" >User</a>
+</header>
 
 <div class="container">
   <div class="row">

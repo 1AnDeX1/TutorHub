@@ -1,0 +1,49 @@
+<div *ngIf="!isLoading; else loading">
+  <h2 class="title">Teacher List</h2>
+
+  <div *ngIf="teacherService.list && teacherService.list.length > 0; else noTeachers">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Subjects</th>
+          <th>Hourly Rate</th>
+          <th>Age</th>
+          <th>Verification Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let teacher of teacherService.list; let i = index">
+          <td>{{ teacher.id }}</td>
+          <td>{{ teacher.userName }}</td>
+          <td>{{ teacher.email }}</td>
+          <td>
+            <span *ngIf="teacher.subjects.length > 0; else noSubjects">
+              <span *ngFor="let subject of teacher.subjects; let j = index">
+                {{ getSubjectName(subject) }}<span *ngIf="j < teacher.subjects.length - 1">, </span>
+              </span>
+            </span>
+            <ng-template #noSubjects>No subjects selected</ng-template>
+          </td>
+          <td>{{ teacher.hourlyRate | currency }}</td>
+          <td>{{ teacher.age }}</td>
+          <td>{{ getVerificationStatusName(teacher.verificationStatus) }}</td>
+          <td>
+            <button class="btn btn-sm btn-danger" (click)="deleteTeacher(teacher.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #noTeachers>
+    <p>No teachers available.</p>
+  </ng-template>
+</div>
+
+<ng-template #loading>
+  <p>Loading data...</p>
+</ng-template>

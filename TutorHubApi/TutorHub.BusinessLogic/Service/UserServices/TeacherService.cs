@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using TutorHub.BusinessLogic.Exceptions;
+using TutorHub.BusinessLogic.FilterPipe;
 using TutorHub.BusinessLogic.IServices.IUserServices;
 using TutorHub.BusinessLogic.Models;
 using TutorHub.BusinessLogic.Models.User;
 using TutorHub.BusinessLogic.Models.User.Teacher;
+using TutorHub.BusinessLogic.Models.User.Teachers;
 using TutorHub.BusinessLogic.Validations;
 using TutorHub.DataAccess.Entities;
 using TutorHub.DataAccess.Enums;
@@ -27,13 +30,37 @@ public class TeacherService(
         return (mapper.Map<IEnumerable<TeacherModel>>(teachersObject.teachers), teachersObject.teachersCount);
     }
 
-    public async Task<(IEnumerable<TeacherModel> teachers, int teachersCount)> GetAvailableTeachersAsync(string? name, int page, int pageSize)
+    public async Task<PagedTeacherResult> GetAvailableTeachersAsync(TeacherFilter filter)
     {
-        var teachersObject = string.IsNullOrEmpty(name)
-            ? await unitOfWork.Teachers.GetAvailableTeachersAsync(page, pageSize)
-            : await unitOfWork.Teachers.GetAvailableTeachersByNameAsync(name, page, pageSize);
+        if (filter.PageSize is 0 or -1 or int.MaxValue)
+        {
+            filter.PageSize = int.MaxValue;
+            filter.Page = 1;
+        }
 
-        return (mapper.Map<IEnumerable<TeacherModel>>(teachersObject.teachers), teachersObject.teachersCount);
+        var query = unitOfWork.Teachers.GetAvailableTeachers();
+
+        var pipeline = new TeacherFilterPipeline();
+        query = pipeline.Apply(query, filter);
+
+
+        var totalCount = await query.CountAsync();
+        var totalPages = filter.PageSize == int.MaxValue ? 1 : (int)Math.Ceiling(totalCount / (double)filter.PageSize);
+
+        var teachers = await query.ToListAsync();
+        var teacherModels = mapper.Map<IEnumerable<TeacherModel>>(teachers);
+
+        return new PagedTeacherResult
+        {
+            Teachers = teacherModels,
+            TotalPages = totalPages,
+            CurrentPage = filter.Page,
+        };
+    }
+
+    public async Task<PagedTeacherResult> GetBestTeachersAsync(TeacherFilter filter)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<TeacherModel?> GetByIdAsync(int id)
@@ -48,8 +75,6 @@ public class TeacherService(
     {
         validator.ValidateTeacherCreateModel(teacherCreateModel);
 
-
-        //Register user
         var userModel = mapper.Map<RegistrationModel>(teacherCreateModel);
 
         var (status, token, userId) = await authService.Registration(userModel, UserRoles.Teacher);
@@ -57,7 +82,6 @@ public class TeacherService(
         {
             throw new ValidationException(token);
         }
-
 
         var teacher = mapper.Map<Teacher>(teacherCreateModel);
 
@@ -147,9 +171,19 @@ public class TeacherService(
         var teacher = await unitOfWork.Teachers.GetByIdAsync(id)
             ?? throw new NotFoundException($"Teacher with ID {id} not found.");
 
-        await userService.DeleteUserAsync(teacher.UserId);
+        var studentTeacherIds = await unitOfWork.StudentTeachers.GetStudentTeacherIdsByStudentId(id);
+
+        foreach (var studentTeacherId in studentTeacherIds)
+        {
+            await unitOfWork.StudentTeachers.DeleteWithSchedulesAsync(studentTeacherId);
+        }
+
+
+        await unitOfWork.Chats.DeleteByTeacherIdAsync(id);
         await unitOfWork.TeacherRatings.DeleteByTeacherIdAsync(id);
+        await userService.DeleteUserAsync(teacher.UserId);
         await unitOfWork.Teachers.DeleteAsync(id);
+
         await unitOfWork.SaveAsync();
     }
 }

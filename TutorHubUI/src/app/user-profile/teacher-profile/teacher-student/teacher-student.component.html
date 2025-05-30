@@ -1,5 +1,5 @@
-<div>
-  <button (click)="toggleStatus()" class="btn btn-primary mb-3">
+<div class="connections">
+  <button (click)="toggleStatus()" class="switch-btn">
     {{ getStatusLabel() }}
   </button>
 
@@ -7,23 +7,24 @@
     <p>No students found for {{ currentStatus === StudentTeacherStatus.Confirmed ? 'Confirmed' : 'Pending' }} status.</p>
   </div>
 
-  <ul class="list-group">
-    <li class="list-group-item" *ngFor="let student of students">
-      <div class="d-flex justify-content-between align-items-center">
-        <div>
+  <ul class="students-list">
+    <li *ngFor="let student of students" class="user-item">
+      <div>
+        <div class="user-item-info">
           <h5>{{ student.userName }} ({{ student.email }})</h5>
           <p *ngIf="student.id">Id: {{ student.id }}</p>
           <p *ngIf="student.grade">Grade: {{ student.grade }}</p>
+          <p *ngIf="student.age">Age: {{ student.age }}</p>
           <p *ngIf="student.description">Description: {{ student.description }}</p>
         </div>
 
         <div *ngIf="currentStatus === StudentTeacherStatus.Pending">
-          <button class="btn btn-success me-2" (click)="confirmStudent(student.id)">Confirm</button>
-          <button class="btn btn-danger" (click)="rejectStudent(student.id)">Reject</button>
+          <button (click)="confirmStudent(student.id)">Confirm</button>
+          <button (click)="rejectStudent(student.id)">Reject</button>
         </div>
 
         <div *ngIf="currentStatus === StudentTeacherStatus.Confirmed">
-          <button class="btn btn-warning" (click)="unsubscribeStudent(student.id)">Unsubscribe</button>
+          <button (click)="unsubscribeStudent(student.id)" class="status-btn">Unsubscribe</button>
         </div>
       </div>
     </li>

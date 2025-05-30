@@ -6,7 +6,7 @@ import { AuthService } from './shared/user/auth.service';
   selector: 'app-root',
   templateUrl: './app.component.html',
   standalone: false,
-  styles: []
+  styleUrl: './app.component.css'
 })
 export class AppComponent {
 

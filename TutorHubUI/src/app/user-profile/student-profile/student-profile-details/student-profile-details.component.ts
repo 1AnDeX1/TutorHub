@@ -9,7 +9,7 @@ import { AuthService } from '../../../shared/user/auth.service';
   selector: 'app-student-profile-details',
   standalone: false,
   templateUrl: './student-profile-details.component.html',
-  styles: ``
+  styleUrl: '../../user-profile-details.css'
 })
 export class StudentProfileDetailsComponent {
   studentId: number | null = null;

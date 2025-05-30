@@ -1,9 +1,24 @@
-<div *ngIf="schedule.length > 0; else noSchedule">
-  <div *ngFor="let item of schedule" class="card p-3 mb-3">
-    <h5>{{ getDayName(item.dayOfWeek) }}</h5>
-    <p><strong>Start Time:</strong> {{ item.startTime }}</p>
-    <p><strong>End Time:</strong> {{ item.endTime }}</p>
-  </div>
+<h2>Student Schedule</h2>
+
+<div *ngIf="schedule.length > 0; else noSchedule" class="schedule-grid">
+  <table class="schedule-table">
+    <thead>
+      <tr>
+        <th *ngFor="let day of dayOfWeekEnum">{{ day }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td *ngFor="let day of dayOfWeekEnum">
+          <div *ngFor="let slot of groupedSchedule[day]" class="slot-box">
+            <div>
+              {{ slot.startTime }} - {{ slot.endTime }} <small>(Teacher ID: {{ slot.teacherId }})</small> 
+            </div>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </div>
 
 <ng-template #noSchedule>

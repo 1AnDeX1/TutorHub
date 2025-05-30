@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -13,9 +13,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
 import { TeacherProfileComponent } from './user-profile/teacher-profile/teacher-profile.component';
 import { TeacherAvailabilitiesComponent } from './user-profile/teacher-profile/teacher-availabilities/teacher-availabilities.component';
-import { TeacherAvailabilityAddComponent } from './user-profile/teacher-profile/teacher-availabilities/teacher-availability-add/teacher-availability-add.component';
-import { TeacherAvailabilityUpdateComponent } from './user-profile/teacher-profile/teacher-availabilities/teacher-availability-update/teacher-availability-update.component';
-import { DashboardComponent } from './admin/dashboard/dashboard.component';
 import { UserComponent } from './user/user.component';
 import { TeacherRegistrationComponent } from './user/registration/teacher-registration/teacher-registration.component';
 import { StudentRegistrationComponent } from './user/registration/student-registration/student-registration.component';
@@ -29,6 +26,13 @@ import { HideIfClaimsNotMetDirective } from './shared/directives/hide-if-claims-
 import { TeacherStudentComponent } from './user-profile/teacher-profile/teacher-student/teacher-student.component';
 import { StudentTeacherComponent } from './user-profile/student-profile/student-teacher/student-teacher.component';
 import { TeacherScheduleComponent } from './user-profile/teacher-profile/teacher-schedule/teacher-schedule.component';
+import { TeacherChatsComponent } from './user-profile/teacher-profile/teacher-chats/teacher-chats.component';
+import { TeacherChatComponent } from './user-profile/teacher-profile/teacher-chats/teacher-chat/teacher-chat.component';
+import { StudentChatsComponent } from './user-profile/student-profile/student-chats/student-chats.component';
+import { StudentChatComponent } from './user-profile/student-profile/student-chats/student-chat/student-chat.component';
+import { ApiErrorInterceptor } from './shared/api-error.interceptor';
+import { TeacherListComponent } from './admin/teacher-list/teacher-list.component';
+import { StudentListComponent } from './admin/student-list/student-list.component';
 
 @NgModule({
   declarations: [
@@ -39,9 +43,6 @@ import { TeacherScheduleComponent } from './user-profile/teacher-profile/teacher
     TeacherProfileDetailsComponent,
     TeacherProfileComponent,
     TeacherAvailabilitiesComponent,
-    TeacherAvailabilityAddComponent,
-    TeacherAvailabilityUpdateComponent,
-    DashboardComponent,
     UserComponent,
     TeacherRegistrationComponent,
     StudentRegistrationComponent,
@@ -53,7 +54,13 @@ import { TeacherScheduleComponent } from './user-profile/teacher-profile/teacher
     HideIfClaimsNotMetDirective,
     TeacherScheduleComponent,
     TeacherStudentComponent,
-    StudentTeacherComponent
+    StudentTeacherComponent,
+    TeacherChatsComponent,
+    TeacherChatComponent,
+    StudentChatsComponent,
+    StudentChatComponent,
+    TeacherListComponent,
+    StudentListComponent,
   ],
   imports: [
     BrowserModule,
@@ -68,7 +75,12 @@ import { TeacherScheduleComponent } from './user-profile/teacher-profile/teacher
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,
       multi: true
-    }],
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ApiErrorInterceptor,
+      multi: true, // Required to allow multiple interceptors
+    },],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,107 @@
+.main-page{
+    display: flex;
+}
+.title{
+    text-align: center;
+}
+
+.filter {
+  padding: 10px 20px;
+  height: 100%; 
+  width: 260px;
+  background-color: wheat; /* Light wheat-like color */
+  border-right: 1px solid wheat;
+  height: 100%;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  height: 100vh;
+}
+
+.filter h1.title {
+  font-size: 24px;
+  color: #b45309;
+  border-bottom: 2px solid #fcd34d;
+}
+
+.filter div {
+  margin-bottom: 5px;
+}
+
+.filter label {
+  font-weight: 600;
+  color: #6b4f1d;
+  font-size: 14px;
+}
+.label-column{
+    display: flex;
+    flex-direction: column;
+}
+.filter input[type="number"],
+.filter select {
+  margin-top: 5px;
+  padding: 5px 8px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.filter input[type="checkbox"] {
+  margin-right: 8px;
+  transform: scale(1.1);
+}
+
+.filter button {
+  width: 100%;
+  padding: 10px;
+  background-color: wheat;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  color: #78350f;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.filter button:hover {
+  background-color: #2C3E50;
+  color: white;
+}
+
+.list{
+    padding: 10px 40px;
+}
+.teacher-block {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.teacher-item {
+  width: 45%;
+  min-width: 440px;
+  display: flex;
+  align-items: center;
+  border: 2px solid darkgrey;
+  border-radius: 10px;
+  padding: 10px;
+  height: auto;
+}
+
+.teacher-item img{
+    height: 200px;
+    width: 200px;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.teacher-item-info strong{
+    font-size: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: normal;
+}
+
+.pagination{
+    text-align: center;
+    margin-top: 20px;
+}
