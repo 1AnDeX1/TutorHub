@@ -8,7 +8,12 @@
 
 <div *ngIf="!loading && !error" class="chat-container">
   <div class="chat-log" #chatLog>
-    <div *ngFor="let message of messages" class="message" [ngClass]="{'teacher-message': message.senderRole === 'Teacher', 'student-message': message.senderRole !== 'Teacher'}">
+    <div *ngFor="let message of messages"
+        class="message"
+        [ngClass]="{
+          'sender-message': message.userId === userId,
+          'receiver-message': message.userId !== userId
+        }">
       <strong>{{ message.senderRole }} ({{ message.senderName }}):</strong>
       <p>{{ message.message }}</p>
     </div>

@@ -21,14 +21,15 @@ export class TeacherProfileDetailsComponent implements OnInit {
   isLoading = false;
   isEditing = false;
   Subject = Subject;
-  verificationEnum: VerificationStatus | undefined;
+  verificationEnum!: VerificationStatus;
   VerificationStatus = VerificationStatus;
   subjectKeys: string[] = [];
+  emailAddress = 'verification@email.com';
+  showVerificationRequest = false;
 
   constructor(
     private teacherService: TeacherService,
     private authService: AuthService,
-    private route: ActivatedRoute,
     private toastr: ToastrService,
     private router: Router
   ) {
@@ -50,7 +51,7 @@ export class TeacherProfileDetailsComponent implements OnInit {
     this.teacherService.getTeacherById(this.teacherId!).subscribe({
       next: (data) => {
         this.teacher = { ...data, password: ''};
-        this.verificationEnum = data.verificationStatus
+        this.verificationEnum = VerificationStatus[data.verificationStatus as unknown as keyof typeof VerificationStatus];
         this.isLoading = false;
       },
       error: () => {
@@ -111,4 +112,19 @@ export class TeacherProfileDetailsComponent implements OnInit {
     const subjectEnum = Subject[subjectName as keyof typeof Subject];
     return this.teacher.subjects.includes(subjectEnum);
   }
+
+  requestVerification(): void {
+    if (!this.teacherId) return;
+
+    this.teacherService.requestVerification(this.teacherId).subscribe({
+      next: () => {
+        this.toastr.success('Verification request sent successfully.');
+        this.loadTeacher();
+      },
+      error: () => {
+        this.toastr.error('Failed to send verification request.');
+      }
+    });
+  }
+
 }

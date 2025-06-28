@@ -56,22 +56,22 @@
 
   <div>
     <label>Subjects</label>
-    <select
-      class="input-field"
-      name="subjects"
-      multiple
-      required
-      [(ngModel)]="formData.subjects"
-      #subjects="ngModel"
-    >
-      <option *ngFor="let key of subjectKeys" [ngValue]="key">
+    <div *ngFor="let key of subjectKeys">
+      <label>
+        <input
+          type="checkbox"
+          [value]="key"
+          [checked]="formData.subjects.includes(key)"
+          (change)="onSubjectCheckboxChange($event, key)"
+        />
         {{ subjectEnum[key] }}
-      </option>
-    </select>
-    <div *ngIf="subjects.invalid && (subjects.dirty || subjects.touched)" class="error">
+      </label>
+    </div>
+    <div *ngIf="formSubmitted && formData.subjects.length === 0" class="error">
       <small>Please select at least one subject.</small>
     </div>
   </div>
+
 
   <div>
     <label>Hourly Rate</label>

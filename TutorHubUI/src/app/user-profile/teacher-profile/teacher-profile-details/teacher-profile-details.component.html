@@ -17,15 +17,27 @@
           <p><strong>Subjects:</strong>
             <span *ngIf="teacher.subjects.length > 0; else noSubjects">
               <span *ngFor="let s of teacher.subjects; let i = index">
-                {{ Subject[s] }}<span *ngIf="i < teacher.subjects.length - 1">, </span>
+                {{ s }}<span *ngIf="i < teacher.subjects.length - 1">, </span>
               </span>
             </span>
             <ng-template #noSubjects>No subjects selected</ng-template>
           </p>
-          <p><strong>Hourly Rate:</strong> {{ teacher.hourlyRate | currency }}</p>
+
+          <p><strong>Hourly Rate:</strong> {{ teacher.hourlyRate }}</p>
           <p><strong>Age:</strong> {{ teacher.age }}</p>
           
-          <p><strong>Verification Status:</strong> {{ VerificationStatus[verificationEnum!] || 'Unknown' }}</p>
+          <p><strong>Verification Status:</strong> {{ VerificationStatus[verificationEnum] }}</p>
+
+          <button *ngIf="verificationEnum === VerificationStatus.NotRequested || verificationEnum === VerificationStatus.Rejected"
+           class="btn-verificationStatus" (click)="showVerificationRequest = true">Change verification status</button>
+          <div *ngIf="showVerificationRequest && (verificationEnum === VerificationStatus.NotRequested || verificationEnum === VerificationStatus.Rejected)">
+            <p class="text-info mt-2">
+              To request verification, please send the required documents to <strong>{{ emailAddress }}</strong>.
+            </p>
+            <button class="btn-verificationStatus" (click)="requestVerification()">Request Verification</button>
+            <button class="btn-verificationStatus" (click)="showVerificationRequest = false">Cancel</button>
+          </div>
+
         </div>
       </div>
     </div>

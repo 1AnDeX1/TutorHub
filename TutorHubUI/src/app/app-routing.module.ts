@@ -25,6 +25,7 @@ import { StudentChatComponent } from './user-profile/student-profile/student-cha
 import { AdminComponent } from './admin/admin.component';
 import { TeacherListComponent } from './admin/teacher-list/teacher-list.component';
 import { StudentListComponent } from './admin/student-list/student-list.component';
+import { VerificationsComponent } from './admin/verifications/verifications.component';
 
 const routes: Routes = [
   { path: 'main', component: MainPageComponent },
@@ -66,6 +67,7 @@ const routes: Routes = [
     children: [
       { path: 'teacher-list', component: TeacherListComponent },
       { path: 'student-list', component: StudentListComponent },
+      { path: 'verifications', component: VerificationsComponent },
     ],
   },
   { path: 'user', component: UserComponent,

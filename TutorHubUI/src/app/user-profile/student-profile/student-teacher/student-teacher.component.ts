@@ -77,6 +77,7 @@ export class StudentTeacherComponent {
         console.log('Success response:', res);
         this.toastr.success('Teacher rated successfully');
         this.ratingValues[teacherId] = 0;
+        this.loadTeachers();
       },
       error: (err) => {
         console.error('Rating error:', err);

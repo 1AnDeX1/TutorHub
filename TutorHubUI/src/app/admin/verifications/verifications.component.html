@@ -1,0 +1,32 @@
+<!-- src/app/admin/verifications/verifications.component.html -->
+<div class="container">
+  <h2>Pending Teacher Verifications</h2>
+
+  <input class="form-control mb-3" [(ngModel)]="searchName" placeholder="Search by name..." (input)="loadPendingRequests()" />
+
+  <div *ngIf="isLoading">Loading...</div>
+
+  <table class="table table-striped" *ngIf="!isLoading && pendingTeachers.length > 0">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Subjects</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let teacher of pendingTeachers">
+        <td>{{ teacher.fullName }}</td>
+        <td>{{ teacher.email }}</td>
+        <td>{{ teacher.subjects.join(', ') }}</td>
+        <td>
+          <button class="btn btn-success btn-sm" (click)="approve(teacher.id)">Approve</button>
+          <button class="btn btn-danger btn-sm" (click)="reject(teacher.id)">Reject</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p *ngIf="!isLoading && pendingTeachers.length === 0">No pending requests.</p>
+</div>

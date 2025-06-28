@@ -2,6 +2,7 @@
   <div class="profile-menu">
     <a routerLink="teacher-list" routerLinkActive="active">Teachers</a><br>
     <a routerLink="student-list" routerLinkActive="active">Students</a><br>
+    <a routerLink="verifications" routerLinkActive="active">Verifications</a><br>
     <button *ngIf="isLoggedIn()" (click)="logout()" class="btn btn-danger">
       Logout
     </button>

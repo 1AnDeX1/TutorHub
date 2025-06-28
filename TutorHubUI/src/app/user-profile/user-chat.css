@@ -83,13 +83,13 @@
   font-size: 12px;
 }
 
-.teacher-message {
+.sender-message {
   align-self: flex-end;
   background-color: wheat;
   text-align: right;
 }
 
-.student-message {
+.receiver-message {
   align-self: flex-start;
   background-color: #e2e3e5;
   text-align: left;

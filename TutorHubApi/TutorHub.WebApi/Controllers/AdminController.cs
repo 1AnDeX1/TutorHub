@@ -12,9 +12,9 @@ namespace TutorHub.WebApi.Controllers;
 public class AdminController(IAdminService adminService) : ControllerBase
 {
     [HttpGet("pendingVerificationRequests")]
-    public async Task<ActionResult<(IEnumerable<TeacherModel> teacher, int teachersCount)>> GetPendingVerificationRequest
+    public async Task<ActionResult<(IEnumerable<TeacherModel> teacher, int teachersCount)>> GetPendingVerificationRequests
         (string? name, int page = 1, int pageSize = 20)
-    {
+   {
         var teachersObject = await adminService.GetTeachersWithPendingVerificationRequest(name, page, pageSize);
 
         return Ok(new { teachersObject.teachers, teachersObject.teachersCount });
@@ -25,7 +25,7 @@ public class AdminController(IAdminService adminService) : ControllerBase
     {
         if (!ModelState.IsValid)
         {
-            return BadRequest("Student creation failed due to invalid model.");
+            return BadRequest("Admin creation failed due to invalid model.");
         }
 
         await adminService.CreateAsync(adminCreateModel);

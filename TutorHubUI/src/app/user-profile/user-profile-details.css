@@ -115,3 +115,10 @@ form button:hover{
     background-color: darkgray;
     color: beige;
 }
+
+.btn-verificationStatus{
+  padding: 5px 10px;
+  border-radius: 20px;
+  background-color: gray;
+  color: white;
+}

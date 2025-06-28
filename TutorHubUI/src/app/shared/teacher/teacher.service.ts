@@ -50,6 +50,11 @@ export class TeacherService {
     return this.http.post(`${this.url}/rate`, rating);
   }
 
+  requestVerification(teacherId: number): Observable<void> {
+    return this.http.put<void>(`${this.url}/requestVerification/${teacherId}`, {});
+  }
+
+
   resetForm(form: NgForm): void {
     form.reset();
   }

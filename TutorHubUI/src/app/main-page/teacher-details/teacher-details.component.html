@@ -5,12 +5,12 @@
     <p><strong>Subjects:</strong>
       <ng-container *ngIf="teacher.subjects.length > 0; else noSubjects">
         <span *ngFor="let s of teacher.subjects; let i = index">
-          {{ subjectEnum[s] }}<span *ngIf="i < teacher.subjects.length - 1">, </span>
+          {{ s }}<span *ngIf="i < teacher.subjects.length - 1">, </span>
         </span>
       </ng-container>
       <ng-template #noSubjects>No subjects</ng-template>
     </p>
-    <p><strong>Hourly Rate:</strong> {{ teacher.hourlyRate | currency }}</p>
+    <p><strong>Hourly Rate:</strong> {{ teacher.hourlyRate }}</p>
     <p><strong>Rating:</strong> {{ teacher.rating }} / 5</p>
     <p><strong>Online:</strong> {{ teacher.online ? 'Yes' : 'No' }}</p>
     <p><strong>Offline:</strong> {{ teacher.offline ? 'Yes' : 'No' }}</p>
@@ -22,7 +22,7 @@
   <ng-template #loading>
     <p>Loading teacher details...</p>
   </ng-template>
-  <div class="buttons">
+  <div class="buttons" *ngIf="authService.isLoggedIn()" [appHideIfClaimsNotMet]="claimReq.studentOnly">
     <button 
       *ngIf="!showConnectionSection" 
       class="subscribe-btn" 

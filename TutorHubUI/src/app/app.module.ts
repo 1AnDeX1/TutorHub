@@ -33,6 +33,7 @@ import { StudentChatComponent } from './user-profile/student-profile/student-cha
 import { ApiErrorInterceptor } from './shared/api-error.interceptor';
 import { TeacherListComponent } from './admin/teacher-list/teacher-list.component';
 import { StudentListComponent } from './admin/student-list/student-list.component';
+import { VerificationsComponent } from './admin/verifications/verifications.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +62,7 @@ import { StudentListComponent } from './admin/student-list/student-list.componen
     StudentChatComponent,
     TeacherListComponent,
     StudentListComponent,
+    VerificationsComponent,
   ],
   imports: [
     BrowserModule,

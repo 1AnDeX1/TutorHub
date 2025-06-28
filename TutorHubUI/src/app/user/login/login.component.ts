@@ -41,6 +41,8 @@ export class LoginComponent implements OnInit {
           this.router.navigateByUrl('/student-profile')
         if(this.authService.getTeacherId() != null)
           this.router.navigateByUrl('/teacher-profile')
+        else if(this.authService.getUserName() === "admin")
+        this.router.navigateByUrl('/admin')
       },
       error: err => {
         this.loading = false;

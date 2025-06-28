@@ -35,7 +35,7 @@ public class TeachersController(
     }
 
     [HttpPost("bestTeachers")]
-    public async Task<ActionResult<PagedTeacherResult>> GetBestTeachersAsync(TeacherFilter filter)
+    public async Task<ActionResult<PagedTeacherResult>> GetBestTeacherAsync(TeacherFilter filter)
     {
         var teachersObject = await teacherService.GetBestTeachersAsync(filter);
 

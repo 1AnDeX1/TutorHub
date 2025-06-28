@@ -8,9 +8,11 @@ using TutorHub.BusinessLogic.Models.User;
 using TutorHub.BusinessLogic.Models.User.Teacher;
 using TutorHub.BusinessLogic.Models.User.Teachers;
 using TutorHub.BusinessLogic.Validations;
+using TutorHub.DataAccess.Data;
 using TutorHub.DataAccess.Entities;
 using TutorHub.DataAccess.Enums;
 using TutorHub.DataAccess.IRepositories;
+using System;
 
 namespace TutorHub.BusinessLogic.Service.UserServices;
 
@@ -19,6 +21,7 @@ public class TeacherService(
     IUserService userService,
     IAuthService authService,
     IValidator validator,
+    ApplicationDbContext context,
     IMapper mapper) : ITeacherService
 {
     public async Task<(IEnumerable<TeacherModel> teachers, int teachersCount)> GetAllAsync(string? name, int page, int pageSize)

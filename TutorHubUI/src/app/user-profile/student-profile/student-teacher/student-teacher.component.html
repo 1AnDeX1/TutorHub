@@ -12,8 +12,8 @@
       </ng-container>
       <ng-template #noSubjects>No subjects</ng-template>
     </p>
-    <p><strong>Hourly Rate:</strong> {{ teacher.hourlyRate | currency }}</p>
-
+    <p><strong>Hourly Rate:</strong> {{ teacher.hourlyRate }}</p>
+    <p><strong>Rating:</strong> {{ teacher.rating }}</p>
     <button (click)="unsubscribe(teacher.id)">Unsubscribe</button>
 
     <div class="form-group">

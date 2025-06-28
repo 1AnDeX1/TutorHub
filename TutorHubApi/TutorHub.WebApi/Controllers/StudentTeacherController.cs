@@ -84,7 +84,7 @@ public class StudentTeacherController : ControllerBase
 
     [HttpGet("{studentTeacherId}/schedules")]
     [Authorize(Roles = "Admin")]
-    public async Task<ActionResult<IEnumerable<ScheduleModel>>> GetschedulesByStudentTeacherId(int studentTeacherId)
+    public async Task<ActionResult<IEnumerable<ScheduleModel>>> GetSchedulesByStudentTeacherId(int studentTeacherId)
     {
         var schedules = await _scheduleService.GetByStudentTeacherIdAsync(studentTeacherId);
 

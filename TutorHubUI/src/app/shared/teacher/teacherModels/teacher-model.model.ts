@@ -12,5 +12,5 @@ export class TeacherModel {
     offline: boolean = false;
     age: number = 0;
     description: string = "";
-    verificationStatus: VerificationStatus | undefined;
+    verificationStatus!: VerificationStatus;
 }

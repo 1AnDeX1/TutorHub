@@ -48,4 +48,15 @@ export class TeacherRegistrationComponent {
     this.formData = new TeacherCreateModel();
     this.formSubmitted = false;
   }
+
+  onSubjectCheckboxChange(event: Event, subjectKey: number): void {
+    const checkbox = event.target as HTMLInputElement;
+    const index = this.formData.subjects.indexOf(subjectKey);
+
+    if (checkbox.checked && index === -1) {
+      this.formData.subjects.push(subjectKey);
+    } else if (!checkbox.checked && index !== -1) {
+      this.formData.subjects.splice(index, 1);
+    }
+  }
 }
